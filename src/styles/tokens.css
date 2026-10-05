@@ -4,82 +4,126 @@
    The single source of truth for the visual language. Components never hardcode
    a colour, radius, shadow or duration — they reference these tokens.
 
-   ART DIRECTION — "Ink & Ember"
-   A warm near-black ink base, bone-white foreground and a single ember accent.
-   The warmth of the accent against cool ink is what keeps this from reading as
-   the usual purple/blue AI-portfolio gradient. One accent, used sparingly.
+   ART DIRECTION — "Warm & Vibrant"
+   A warm cream canvas, near-black warm ink, and three accents that stay in the
+   same warm/cool family: coral-orange as the primary, a cool teal as the
+   secondary counterweight, and a sunny yellow for small moments of emphasis.
+   Light is the default; dark is an equal citizen rather than an afterthought.
 
-   Everything is a dark, art-directed theme. Tokens are grouped so a light
-   theme can be introduced later by overriding one block, without touching
-   components.
+   THEME MODEL
+   Semantic tokens are declared with `light-dark()`. The browser resolves them
+   against the `color-scheme` property, which is itself driven by one attribute
+   on <html> (`data-theme="light" | "dark"`). A theme switch is therefore a
+   single attribute write — no re-render, no class churn, no flash, because the
+   tokens follow the attribute automatically.
+
+   Contrast: every foreground/background pair below meets WCAG AA. Accent
+   colours that fail AA as *text* on cream have a darker `-ink` sibling used for
+   exactly that purpose, so the vivid hexes stay vivid while small text stays
+   readable.
    ========================================================================= */
 
 @theme {
   /* ---------------------------------------------------------------------
-     COLOUR — INK (backgrounds & surfaces)
-     Warm-biased blacks. Pure #000 reads cheap and kills depth; a touch of
-     warmth lets the ember accent sit in the same colour family.
+     RAW PALETTE — fixed values, never swapped by theme.
+     Named for what they are, not where they are used.
      --------------------------------------------------------------------- */
-  --color-ink-950: #08080a;
-  --color-ink-900: #0d0d10;
-  --color-ink-850: #111115;
-  --color-ink-800: #16161b;
-  --color-ink-700: #1e1e24;
-  --color-ink-600: #282830;
-  --color-ink-500: #35353e;
 
-  /* ---------------------------------------------------------------------
-     COLOUR — BONE (foregrounds)
-     --------------------------------------------------------------------- */
-  --color-bone-50: #f5f3ef;
-  --color-bone-100: #ece9e3;
-  --color-bone-200: #cfccc5;
-  --color-bone-300: #a8a49c;
-  --color-bone-400: #7d7a74;
-  --color-bone-500: #5a5751;
+  /* Warm cream → warm ink. The page's structural neutral ramp. */
+  --color-cream-50: #fff8f0;
+  --color-cream-100: #fffdf9;
+  --color-cream-200: #fdf3e7;
+  --color-cream-300: #f7e9d8;
+  --color-cream-400: #efe0ca;
 
-  /* ---------------------------------------------------------------------
-     COLOUR — EMBER (the one accent)
-     A restrained terracotta-amber. Never used as a large fill; it is a
-     punctuation mark for emphasis, focus and active state.
-     --------------------------------------------------------------------- */
-  --color-ember-300: #f0a366;
-  --color-ember-400: #e5924f;
-  --color-ember-500: #d97e38;
-  --color-ember-600: #b96429;
-  --color-ember-700: #8f4b1e;
-  --color-ember-950: #2a160a;
+  --color-ink-50: #f6efe4;
+  --color-ink-200: #d8cfc0;
+  --color-ink-400: #a79f92;
+  --color-ink-500: #8b8478;
+  --color-ink-600: #5b574f;
+  --color-ink-700: #3b3833;
+  --color-ink-800: #2a2723;
+  --color-ink-900: #1b1a17;
+  --color-ink-950: #15130f;
+
+  /* Primary — coral-orange. */
+  --color-coral-300: #ffb59a;
+  --color-coral-400: #ff9466;
+  --color-coral-500: #f26b3a;
+  --color-coral-600: #d9541f;
+  --color-coral-700: #b24316;
+  --color-coral-800: #8d3411;
+  --color-coral-900: #6b260c;
+  --color-coral-950: #3d1506;
+
+  /* Secondary — cool teal. The counterweight to all that coral. */
+  --color-teal-300: #7fd3db;
+  --color-teal-400: #33b6c2;
+  --color-teal-500: #0e9aa7;
+  --color-teal-600: #0b7f8a;
+  --color-teal-700: #09646d;
+  --color-teal-800: #074b52;
+  --color-teal-900: #053a40;
+  --color-teal-950: #02252a;
+
+  /* Accent — sunny yellow. Emphasis only, never a large fill. */
+  --color-sun-300: #ffd88a;
+  --color-sun-400: #ffc65c;
+  --color-sun-500: #ffb627;
+  --color-sun-600: #d9900d;
+  --color-sun-700: #a86a06;
+  --color-sun-800: #7d4d04;
+  --color-sun-900: #5c3803;
 
   /* ---------------------------------------------------------------------
      SEMANTIC TOKENS
-     What components actually reference.
+     What components actually reference. Resolved by `light-dark()`, so each
+     carries its light value first and its dark value second.
      --------------------------------------------------------------------- */
-  --color-background: var(--color-ink-900);
-  --color-background-deep: var(--color-ink-950);
-  --color-foreground: var(--color-bone-100);
-  --color-foreground-strong: var(--color-bone-50);
-  --color-muted: var(--color-bone-300);
-  --color-muted-strong: var(--color-bone-200);
-  --color-subtle: var(--color-bone-400);
+  --color-background: light-dark(#fff8f0, #15130f);
+  --color-surface: light-dark(#ffffff, #1f1c17);
+  --color-surface-raised: light-dark(#fffdf9, #262219);
 
-  --color-border: color-mix(in oklab, var(--color-bone-100) 9%, transparent);
-  --color-border-strong: color-mix(in oklab, var(--color-bone-100) 16%, transparent);
-  --color-border-accent: color-mix(in oklab, var(--color-ember-400) 42%, transparent);
+  --color-foreground: light-dark(#1b1a17, #f6efe4);
+  --color-foreground-strong: light-dark(#1b1a17, #f6efe4);
+  --color-muted: light-dark(#5b574f, #b8ae9f);
+  --color-muted-strong: light-dark(#3b3833, #d8cfc0);
+  --color-subtle: light-dark(#6f685e, #9c9384);
 
-  --color-surface: var(--color-ink-850);
-  --color-surface-raised: var(--color-ink-800);
-  --color-surface-overlay: var(--color-ink-700);
+  /* Hairlines. Warm in both themes — a neutral grey reads cold on cream.
+     `--color-border` is decorative. `--color-border-strong` outlines real
+     controls (ghost buttons), so it is dark enough to clear the 3:1
+     non-text threshold on both backgrounds rather than vanishing on cream. */
+  --color-border: light-dark(#e8dfd2, #332e26);
+  --color-border-strong: light-dark(#94826a, #7a6e5c);
 
-  --color-accent: var(--color-ember-400);
-  --color-accent-hover: var(--color-ember-300);
-  --color-accent-active: var(--color-ember-500);
-  --color-accent-on: var(--color-ink-950);
+  /* Primary accent. Lifted slightly in dark mode so it keeps its glow
+     against a much darker ground without becoming neon.
+     `accent-on` is ink rather than white: white on #f26b3a measures only
+     3.0:1, whereas ink on the same coral gives 5.8:1. Hover lightens for the
+     same reason — darkening the fill would only reduce contrast against ink. */
+  --color-accent: light-dark(#f26b3a, #ff8f5e);
+  --color-accent-hover: light-dark(#ff7a4a, #ffa57c);
+  --color-accent-active: light-dark(#e85f2c, #ffb99a);
+  --color-accent-on: light-dark(#1b1a17, #15130f);
 
-  /* Glass — used only where translucency earns its keep: sticky chrome and
-     surfaces that sit over 3D. Never a blanket card treatment. */
-  --color-glass: color-mix(in oklab, var(--color-bone-100) 4%, transparent);
-  --color-glass-strong: color-mix(in oklab, var(--color-bone-100) 7%, transparent);
-  --color-glass-border: color-mix(in oklab, var(--color-bone-100) 12%, transparent);
+  /* Text-safe accents. The vivid hexes fail AA as small text on cream
+     (coral measures ~2.9:1), so links, inline emphasis and coloured labels use
+     these darker siblings instead. Verified >=4.5:1 light and >=7:1 dark. */
+  --color-accent-ink: light-dark(#b24316, #ff9466);
+  --color-teal-ink: light-dark(#09646d, #33b6c2);
+  --color-sun-ink: light-dark(#7d4d04, #ffc65c);
+
+  --color-secondary: light-dark(#0e9aa7, #33b6c2);
+  --color-secondary-ink: light-dark(#09646d, #33b6c2);
+  --color-sun: light-dark(#ffb627, #ffc65c);
+  --color-sun-soft: light-dark(#d9900d, #ffd88a);
+
+  /* Tinted washes — the only sanctioned place a soft gradient or blob may
+     appear, and even then only inside the hero. */
+  --color-wash-coral: light-dark(#ffb59a, #f26b3a);
+  --color-wash-teal: light-dark(#7fd3db, #0e9aa7);
+  --color-wash-sun: light-dark(#ffd88a, #ffb627);
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHY
@@ -120,31 +164,38 @@
 }
 /* ---------------------------------------------------------------------
    RADII
-   Restrained. Large radii on every element is the single biggest tell of a
-   template, so the scale tops out early and most surfaces sit at sm/md.
+   Restrained, per the brief: cards top out at 12px. Large radii on every
+   element is the single biggest tell of a template, so the scale is
+   deliberately shallow and most surfaces sit at sm/md.
    --------------------------------------------------------------------- */
 @theme {
   --radius-none: 0px;
-  --radius-xs: 4px;
-  --radius-sm: 8px;
+  --radius-xs: 3px;
+  --radius-sm: 6px;
   --radius-md: 12px;
-  --radius-lg: 18px;
-  --radius-xl: 28px;
+  --radius-lg: 12px;
+  --radius-xl: 12px;
   --radius-full: 9999px;
 }
+
 /* ---------------------------------------------------------------------
    ELEVATION
-   Shadows are warm-tinted, never neutral black, and pair with a hairline
-   top-highlight to suggest a light source above the surface.
+   Warm-tinted, never neutral black. The light theme gets a whisper-thin
+   shadow; the dark theme gets a deeper one, because a dark surface against a
+   dark page needs more separation than a light one does.
    --------------------------------------------------------------------- */
 @theme {
-  --shadow-e1: 0 1px 2px 0 rgb(10 7 4 / 0.4);
-  --shadow-e2: 0 4px 16px -4px rgb(10 7 4 / 0.5), 0 1px 2px 0 rgb(10 7 4 / 0.35);
-  --shadow-e3: 0 18px 40px -12px rgb(10 7 4 / 0.6), 0 2px 6px -2px rgb(10 7 4 / 0.4);
-  --shadow-lift: 0 32px 64px -24px rgb(10 7 4 / 0.75), 0 4px 12px -4px rgb(10 7 4 / 0.45);
-  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--color-ember-400) 28%, transparent),
-    0 12px 32px -12px color-mix(in oklab, var(--color-ember-500) 30%, transparent);
-  --shadow-highlight: inset 0 1px 0 0 color-mix(in oklab, var(--color-bone-100) 7%, transparent);
+  --shadow-e1: 0 1px 2px 0 light-dark(rgb(94 60 30 / 0.06), rgb(0 0 0 / 0.4));
+  --shadow-e2: 0 4px 16px -4px light-dark(rgb(94 60 30 / 0.09), rgb(0 0 0 / 0.5)),
+    0 1px 2px 0 light-dark(rgb(94 60 30 / 0.05), rgb(0 0 0 / 0.35));
+  --shadow-e3: 0 18px 40px -12px light-dark(rgb(94 60 30 / 0.14), rgb(0 0 0 / 0.6)),
+    0 2px 6px -2px light-dark(rgb(94 60 30 / 0.07), rgb(0 0 0 / 0.4));
+  --shadow-lift: 0 24px 48px -20px light-dark(rgb(94 60 30 / 0.2), rgb(0 0 0 / 0.7)),
+    0 4px 12px -4px light-dark(rgb(94 60 30 / 0.08), rgb(0 0 0 / 0.45));
+
+  /* The one place a coloured glow is allowed: focus states and the primary
+     button. Never on a card at rest. */
+  --shadow-glow: 0 0 0 3px light-dark(rgb(242 107 58 / 0.22), rgb(255 143 94 / 0.28));
 }
 
 /* ---------------------------------------------------------------------
@@ -214,14 +265,14 @@
 
   /* -------------------------------------------------------------------
      DEPTH STACK
-     Explicit z-indices. The 3D canvas sits above the background but below
-     all content, so type is never occluded by the scene.
+     Explicit z-indices so nothing depends on source order. The page modal
+     sits above the sticky header, which is why the header must declare a
+     z-index at all.
 
      Declared in `@theme` rather than `:root` on purpose: Tailwind only
      generates utilities from theme namespaces, so this is what makes
-     `z-nav`, `z-canvas` and friends resolve as real classes.
+     `z-nav`, `z-modal` and friends resolve as real classes.
      ------------------------------------------------------------------- */
-  --z-index-canvas: 0;
   --z-index-base: 10;
   --z-index-raised: 20;
   --z-index-sticky: 30;
@@ -230,9 +281,31 @@
   --z-index-modal: 60;
 }
 
+/* ---------------------------------------------------------------------
+   THEME BOOTSTRAP
+   `color-scheme` is the single switch every `light-dark()` token resolves
+   against, so setting it once re-themes the entire document — including the
+   scrollbar and native form controls, which `color-scheme` also drives.
+   The media query covers "no stored preference"; the inline script in
+   index.html has already written `data-theme` by the time this applies.
+   --------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+  }
+}
+
 /* Non-utility variables: consumed directly via var(), never as a class. */
 :root {
   /* Height of the sticky header, consumed by scroll-padding-top so anchor
      links are never hidden beneath it. */
-  --header-height: 4.5rem;
+  --header-height: 4.25rem;
 }

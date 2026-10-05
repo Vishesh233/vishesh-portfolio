@@ -4,22 +4,64 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#0d0d10" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#FFF8F0" media="(prefers-color-scheme: light)" />
+    <meta
+      name="theme-color"
+      content="#15130F"
+      media="(prefers-color-scheme: dark)"
+    />
 
-    <title>Vishesh Khanna — Software Engineer</title>
+    <title>Vishesh Khanna — Full-Stack Software Engineer</title>
     <meta
       name="description"
-      content="Portfolio of Vishesh Khanna — software engineer, full-stack developer, Python developer."
+      content="Vishesh Khanna — full-stack software engineer building web applications with React, Node.js, Express and MongoDB."
     />
 
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Vishesh Khanna — Software Engineer" />
+    <meta property="og:title" content="Vishesh Khanna — Full-Stack Software Engineer" />
     <meta
       property="og:description"
-      content="Portfolio of Vishesh Khanna — software engineer, full-stack developer, Python developer."
+      content="Vishesh Khanna — full-stack software engineer building web applications with React, Node.js, Express and MongoDB."
     />
     <meta name="twitter:card" content="summary" />
+
+    <!--
+      Theme boot script.
+
+      Runs synchronously in <head>, before any CSS paints, so the correct
+      palette is already on <html> when the first frame renders. Without it a
+      dark-mode visitor sees a cream flash on every load.
+
+      Kept inline and dependency-free on purpose: an external file would be a
+      network request that cannot be guaranteed to land before first paint.
+
+      Must stay in sync with src/lib/theme.js — same storage key, same
+      attribute, same resolution order (stored choice, then system).
+    -->
+    <script>
+      ;(function () {
+        try {
+          var stored = window.localStorage.getItem('vk-theme')
+          if (stored !== 'light' && stored !== 'dark') {
+            stored = window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
+          }
+          document.documentElement.setAttribute('data-theme', stored)
+        } catch (error) {
+          // Storage blocked (private mode, disabled cookies). Fall back to the
+          // system preference, and if even that fails leave the default (light)
+          // declared in tokens.css in place.
+          document.documentElement.setAttribute(
+            'data-theme',
+            window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light',
+          )
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

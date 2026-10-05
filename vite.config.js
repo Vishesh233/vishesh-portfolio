@@ -8,9 +8,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        // Keep the motion runtime in its own chunk. When the React Three
-        // Fiber scenes land they will be code-split the same way, so the
-        // first paint never waits on 3D.
+        // Keep the motion runtime in its own chunk. Framer Motion is only used
+        // for scroll reveals and small interactions, so splitting it out keeps
+        // it cached independently of application code.
         manualChunks(id) {
           if (id.includes('node_modules/framer-motion')) return 'motion'
         },
