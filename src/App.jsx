@@ -1,6 +1,9 @@
 import { SkipLink } from './components/layout/SkipLink.jsx'
 import { SiteHeader } from './components/layout/SiteHeader.jsx'
 import { Container } from './components/layout/Container.jsx'
+import { Hero } from './components/sections/Hero.jsx'
+import { About } from './components/sections/About.jsx'
+import { Skills } from './components/sections/Skills.jsx'
 
 /**
  * Application shell.
@@ -18,10 +21,14 @@ import { Container } from './components/layout/Container.jsx'
  * portfolio look like a gradient template. Everything below the hero composites
  * over the plain `--color-background`.
  *
- * SECTIONS
- * Stages 2-4 mount About, Skills, Projects, Education and Contact here. Until
- * then the shell renders the hero only, so the header's scroll-spy has one
- * real target and no link points at an id that does not exist.
+ * SECTION ORDER
+ * Home, About, Skills, Projects, Education, Contact — matching the `sections`
+ * registry in src/data/site.js, which the header's scroll-spy also reads. About
+ * and Skills are mounted now; Projects, Education and Contact arrive in the
+ * later stages, and their nav links resolve as each section lands.
+ *
+ * `deferred` hands off-screen sections to the browser via content-visibility.
+ * It is NOT applied to the hero, which is on screen immediately.
  */
 export default function App() {
   return (
@@ -31,18 +38,9 @@ export default function App() {
       <SiteHeader />
 
       <main id="main" tabIndex={-1} className="focus:outline-none">
-        {/* PLACEHOLDER — replaced by the real Hero in Stage 2. */}
-        <section
-          id="hero"
-          aria-label="Introduction"
-          className="section flex min-h-[calc(100svh-var(--header-height))] items-center"
-        >
-          <Container width="wide">
-            <h1 className="text-display-md font-display text-foreground-strong">
-              Vishesh Khanna
-            </h1>
-          </Container>
-        </section>
+        <Hero />
+        <About deferred />
+        <Skills deferred />
       </main>
 
       <footer className="border-t border-border">
