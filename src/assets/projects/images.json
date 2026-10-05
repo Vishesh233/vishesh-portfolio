@@ -1,0 +1,101 @@
+{
+  "interviewpilot": {
+    "width": 1917,
+    "height": 887,
+    "png": "interviewpilot.png",
+    "webp": "interviewpilot.webp",
+    "variants": [
+      {
+        "width": 1917,
+        "file": "interviewpilot.webp",
+        "bytes": 43040
+      },
+      {
+        "width": 480,
+        "file": "interviewpilot-480.webp",
+        "bytes": 5966
+      },
+      {
+        "width": 768,
+        "file": "interviewpilot-768.webp",
+        "bytes": 12136
+      },
+      {
+        "width": 1024,
+        "file": "interviewpilot-1024.webp",
+        "bytes": 18718
+      },
+      {
+        "width": 1440,
+        "file": "interviewpilot-1440.webp",
+        "bytes": 29476
+      }
+    ]
+  },
+  "libverse": {
+    "width": 1919,
+    "height": 1048,
+    "png": "libverse.png",
+    "webp": "libverse.webp",
+    "variants": [
+      {
+        "width": 1919,
+        "file": "libverse.webp",
+        "bytes": 63006
+      },
+      {
+        "width": 480,
+        "file": "libverse-480.webp",
+        "bytes": 7260
+      },
+      {
+        "width": 768,
+        "file": "libverse-768.webp",
+        "bytes": 14572
+      },
+      {
+        "width": 1024,
+        "file": "libverse-1024.webp",
+        "bytes": 23700
+      },
+      {
+        "width": 1440,
+        "file": "libverse-1440.webp",
+        "bytes": 40942
+      }
+    ]
+  },
+  "qr-code-studio": {
+    "width": 1919,
+    "height": 1192,
+    "png": "qr-code-studio.png",
+    "webp": "qr-code-studio.webp",
+    "variants": [
+      {
+        "width": 1919,
+        "file": "qr-code-studio.webp",
+        "bytes": 32796
+      },
+      {
+        "width": 480,
+        "file": "qr-code-studio-480.webp",
+        "bytes": 3870
+      },
+      {
+        "width": 768,
+        "file": "qr-code-studio-768.webp",
+        "bytes": 8302
+      },
+      {
+        "width": 1024,
+        "file": "qr-code-studio-1024.webp",
+        "bytes": 13010
+      },
+      {
+        "width": 1440,
+        "file": "qr-code-studio-1440.webp",
+        "bytes": 22102
+      }
+    ]
+  }
+}
