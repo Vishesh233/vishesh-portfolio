@@ -255,3 +255,72 @@ export const projects = [
     ],
   },
 ]
+/**
+ * Portrait.
+ *
+ * The only photograph on the page. `src` is a lazy import so Vite can
+ * fingerprint and optimise it; `width`/`height` are the real intrinsic pixel
+ * dimensions read off disk (400x400), so the browser reserves the correct box
+ * in both the circular hero frame and the rectangular About frame and the page
+ * never shifts when it loads.
+ *
+ * Set `image` to null to fall back to the monogram treatment everywhere — the
+ * Portrait component handles that case, so no caller needs its own branch.
+ */
+export const profile = {
+  image: () => import('../assets/profile.jpg'),
+  width: 400,
+  height: 400,
+  alt: 'Portrait of Vishesh Khanna',
+  monogram: 'VK',
+}
+
+/**
+ * The three About cards.
+ *
+ * Each is a small, labelled statement about how the work is approached. Every
+ * clause restates a supplied fact — the frameworks actually used, the DSA
+ * count, the named programmes, the named organisations. `dot` selects which
+ * accent marks the card; the three are distinct so the cards read as a set
+ * rather than as three identical blocks.
+ */
+export const aboutCards = [
+  {
+    id: 'what-i-build',
+    label: 'What I build',
+    dot: 'accent',
+    body:
+      'Full-stack web apps with React on the front end and Node.js, Express and MongoDB behind them — including LibVerse, a role-based library management system, and InterviewPilot, an AI-assisted interview preparation tool.',
+  },
+  {
+    id: 'how-i-practice',
+    label: 'How I practice',
+    dot: 'secondary',
+    body:
+      '80+ DSA problems solved on LeetCode and NeetCode, alongside learning programmes from IBM, JPMorgan Chase and Deloitte. The latter two are Forage virtual experience programmes rather than roles.',
+  },
+  {
+    id: 'beyond-code',
+    label: 'Beyond code',
+    dot: 'sun',
+    body:
+      'Core member of Praharsh, the college social welfare club, and a volunteer with Unnat Bharat Abhiyan.',
+  },
+]
+
+/**
+ * The About stat tiles.
+ *
+ * Derived from the registries above rather than typed in by hand, so a tile can
+ * never disagree with the data it summarises. If a fourth project or
+ * certification is added, these counts follow automatically.
+ */
+export const stats = [
+  { id: 'dsa', value: '80+', label: 'DSA problems solved' },
+  { id: 'projects', value: String(projects.length), label: 'Projects built' },
+  {
+    id: 'certifications',
+    value: String(certifications.length),
+    label: 'Certifications',
+  },
+]

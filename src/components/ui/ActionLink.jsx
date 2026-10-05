@@ -27,6 +27,13 @@ export function ActionLink({
   external = false,
   /** Triggers a download; `value` is the saved filename. */
   download,
+  /**
+   * A node rendered in the trailing slot — a real icon rather than the default
+   * arrow. Supplied by the caller so this component stays free of icon imports.
+   */
+  icon,
+  /** Set false when `icon` already fills the trailing slot. */
+  arrow = true,
   className,
   ...rest
 }) {
@@ -53,13 +60,17 @@ export function ActionLink({
     >
       {children}
 
-      {/* Arrow nudges on hover only — a small confirmation of direction. */}
-      <span
-        aria-hidden="true"
-        className="transition-transform duration-200 group-hover:translate-x-0.5"
-      >
-        →
-      </span>
+      {/* Exactly one trailing mark, never two: a supplied icon replaces the
+          default arrow rather than sitting beside it. */}
+      {icon ??
+        (arrow ? (
+          <span
+            aria-hidden="true"
+            className="transition-transform duration-200 group-hover:translate-x-0.5"
+          >
+            →
+          </span>
+        ) : null)}
     </a>
   )
 }
