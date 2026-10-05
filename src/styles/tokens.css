@@ -1,0 +1,238 @@
+/* ============================================================================
+   DESIGN TOKENS
+   ----------------------------------------------------------------------------
+   The single source of truth for the visual language. Components never hardcode
+   a colour, radius, shadow or duration — they reference these tokens.
+
+   ART DIRECTION — "Ink & Ember"
+   A warm near-black ink base, bone-white foreground and a single ember accent.
+   The warmth of the accent against cool ink is what keeps this from reading as
+   the usual purple/blue AI-portfolio gradient. One accent, used sparingly.
+
+   Everything is a dark, art-directed theme. Tokens are grouped so a light
+   theme can be introduced later by overriding one block, without touching
+   components.
+   ========================================================================= */
+
+@theme {
+  /* ---------------------------------------------------------------------
+     COLOUR — INK (backgrounds & surfaces)
+     Warm-biased blacks. Pure #000 reads cheap and kills depth; a touch of
+     warmth lets the ember accent sit in the same colour family.
+     --------------------------------------------------------------------- */
+  --color-ink-950: #08080a;
+  --color-ink-900: #0d0d10;
+  --color-ink-850: #111115;
+  --color-ink-800: #16161b;
+  --color-ink-700: #1e1e24;
+  --color-ink-600: #282830;
+  --color-ink-500: #35353e;
+
+  /* ---------------------------------------------------------------------
+     COLOUR — BONE (foregrounds)
+     --------------------------------------------------------------------- */
+  --color-bone-50: #f5f3ef;
+  --color-bone-100: #ece9e3;
+  --color-bone-200: #cfccc5;
+  --color-bone-300: #a8a49c;
+  --color-bone-400: #7d7a74;
+  --color-bone-500: #5a5751;
+
+  /* ---------------------------------------------------------------------
+     COLOUR — EMBER (the one accent)
+     A restrained terracotta-amber. Never used as a large fill; it is a
+     punctuation mark for emphasis, focus and active state.
+     --------------------------------------------------------------------- */
+  --color-ember-300: #f0a366;
+  --color-ember-400: #e5924f;
+  --color-ember-500: #d97e38;
+  --color-ember-600: #b96429;
+  --color-ember-700: #8f4b1e;
+  --color-ember-950: #2a160a;
+
+  /* ---------------------------------------------------------------------
+     SEMANTIC TOKENS
+     What components actually reference.
+     --------------------------------------------------------------------- */
+  --color-background: var(--color-ink-900);
+  --color-background-deep: var(--color-ink-950);
+  --color-foreground: var(--color-bone-100);
+  --color-foreground-strong: var(--color-bone-50);
+  --color-muted: var(--color-bone-300);
+  --color-muted-strong: var(--color-bone-200);
+  --color-subtle: var(--color-bone-400);
+
+  --color-border: color-mix(in oklab, var(--color-bone-100) 9%, transparent);
+  --color-border-strong: color-mix(in oklab, var(--color-bone-100) 16%, transparent);
+  --color-border-accent: color-mix(in oklab, var(--color-ember-400) 42%, transparent);
+
+  --color-surface: var(--color-ink-850);
+  --color-surface-raised: var(--color-ink-800);
+  --color-surface-overlay: var(--color-ink-700);
+
+  --color-accent: var(--color-ember-400);
+  --color-accent-hover: var(--color-ember-300);
+  --color-accent-active: var(--color-ember-500);
+  --color-accent-on: var(--color-ink-950);
+
+  /* Glass — used only where translucency earns its keep: sticky chrome and
+     surfaces that sit over 3D. Never a blanket card treatment. */
+  --color-glass: color-mix(in oklab, var(--color-bone-100) 4%, transparent);
+  --color-glass-strong: color-mix(in oklab, var(--color-bone-100) 7%, transparent);
+  --color-glass-border: color-mix(in oklab, var(--color-bone-100) 12%, transparent);
+
+  /* ---------------------------------------------------------------------
+     TYPOGRAPHY
+     A three-voice system:
+       display  Instrument Serif — editorial, art-directed moments only
+       sans     Geist Variable  — all interface and body copy
+       mono     Geist Mono       — metadata, tech labels, code
+     --------------------------------------------------------------------- */
+  --font-display: 'Instrument Serif', ui-serif, Georgia, 'Times New Roman', serif;
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'SFMono-Regular', 'Cascadia Mono', monospace;
+
+  /* Fluid scale. Clamp keeps hero type readable from 360px to 2560px without
+     a single media query. */
+  --text-micro: 0.6875rem;
+  --text-micro--line-height: 1.2;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.4;
+  --text-body-sm: 0.9375rem;
+  --text-body-sm--line-height: 1.6;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.65;
+  --text-lead: clamp(1.125rem, 0.35vw + 1.05rem, 1.375rem);
+  --text-lead--line-height: 1.6;
+  --text-title: clamp(1.375rem, 0.55vw + 1.22rem, 1.875rem);
+  --text-title--line-height: 1.25;
+  --text-display-sm: clamp(2rem, 1.4vw + 1.6rem, 3rem);
+  --text-display-sm--line-height: 1.1;
+  --text-display-md: clamp(2.75rem, 3.2vw + 1.7rem, 5rem);
+  --text-display-md--line-height: 1.02;
+  --text-display-lg: clamp(3.5rem, 7vw + 1.4rem, 9rem);
+  --text-display-lg--line-height: 0.94;
+
+  --tracking-tight: -0.02em;
+  --tracking-tighter: -0.035em;
+  --tracking-wide: 0.08em;
+  --tracking-widest: 0.16em;
+}
+/* ---------------------------------------------------------------------
+   RADII
+   Restrained. Large radii on every element is the single biggest tell of a
+   template, so the scale tops out early and most surfaces sit at sm/md.
+   --------------------------------------------------------------------- */
+@theme {
+  --radius-none: 0px;
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+}
+/* ---------------------------------------------------------------------
+   ELEVATION
+   Shadows are warm-tinted, never neutral black, and pair with a hairline
+   top-highlight to suggest a light source above the surface.
+   --------------------------------------------------------------------- */
+@theme {
+  --shadow-e1: 0 1px 2px 0 rgb(10 7 4 / 0.4);
+  --shadow-e2: 0 4px 16px -4px rgb(10 7 4 / 0.5), 0 1px 2px 0 rgb(10 7 4 / 0.35);
+  --shadow-e3: 0 18px 40px -12px rgb(10 7 4 / 0.6), 0 2px 6px -2px rgb(10 7 4 / 0.4);
+  --shadow-lift: 0 32px 64px -24px rgb(10 7 4 / 0.75), 0 4px 12px -4px rgb(10 7 4 / 0.45);
+  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--color-ember-400) 28%, transparent),
+    0 12px 32px -12px color-mix(in oklab, var(--color-ember-500) 30%, transparent);
+  --shadow-highlight: inset 0 1px 0 0 color-mix(in oklab, var(--color-bone-100) 7%, transparent);
+}
+
+/* ---------------------------------------------------------------------
+   MOTION
+   Durations are deliberately unhurried. Motion here should feel like a page
+   turning, not a toy. `--ease-*` values are mirrored in src/lib/motion.js so
+   CSS transitions and Framer Motion animations cannot drift apart.
+   --------------------------------------------------------------------- */
+@theme {
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-fade-up: fade-up 0.7s var(--ease-out-expo) both;
+  --animate-fade-in: fade-in 0.6s var(--ease-standard) both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* ============================================================================
+   LAYOUT PRIMITIVES
+   Breakpoints and container widths live here so the rhythm is consistent
+   everywhere and documented in one place.
+
+   Breakpoints are mobile-first. Declaring them explicitly (rather than
+   inheriting Tailwind's defaults) keeps the scale intentional and legible.
+   ========================================================================= */
+@theme {
+  --breakpoint-xs: 30rem; /*  480px — large phone     */
+  --breakpoint-sm: 40rem; /*  640px — phone landscape */
+  --breakpoint-md: 48rem; /*  768px — tablet          */
+  --breakpoint-lg: 64rem; /* 1024px — laptop          */
+  --breakpoint-xl: 80rem; /* 1280px — desktop         */
+  --breakpoint-2xl: 96rem; /* 1536px — large desktop  */
+
+  /* Reading measure. Prose columns are capped well below the full container
+     so line length stays comfortable at every breakpoint. */
+  --container-prose: 68ch;
+  --container-narrow: 46rem;
+  --container-content: 76rem;
+  --container-wide: 92rem;
+
+  /* Vertical rhythm between page sections. Fluid, so mobile is not cramped
+     and desktop is not cavernous. */
+  --spacing-section: clamp(5rem, 9vw, 11rem);
+  --spacing-section-sm: clamp(3.5rem, 6vw, 6rem);
+  --spacing-gutter: clamp(1.25rem, 4vw, 3.5rem);
+
+  /* -------------------------------------------------------------------
+     DEPTH STACK
+     Explicit z-indices. The 3D canvas sits above the background but below
+     all content, so type is never occluded by the scene.
+
+     Declared in `@theme` rather than `:root` on purpose: Tailwind only
+     generates utilities from theme namespaces, so this is what makes
+     `z-nav`, `z-canvas` and friends resolve as real classes.
+     ------------------------------------------------------------------- */
+  --z-index-canvas: 0;
+  --z-index-base: 10;
+  --z-index-raised: 20;
+  --z-index-sticky: 30;
+  --z-index-nav: 40;
+  --z-index-overlay: 50;
+  --z-index-modal: 60;
+}
+
+/* Non-utility variables: consumed directly via var(), never as a class. */
+:root {
+  /* Height of the sticky header, consumed by scroll-padding-top so anchor
+     links are never hidden beneath it. */
+  --header-height: 4.5rem;
+}

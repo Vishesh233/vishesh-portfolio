@@ -1,0 +1,21 @@
+/* ============================================================================
+   Vishesh Khanna — Portfolio
+   Global stylesheet. Order matters:
+
+     1. fonts      self-hosted typefaces, loaded as CSS so the woff2 files are
+                   emitted with hashed URLs and fetched before first paint
+     2. tailwind   v4 engine + design tokens
+     3. base       element defaults, accessibility, reduced-motion
+     4. utilities  a small number of project-level primitives
+   ========================================================================= */
+
+@import '@fontsource-variable/geist/wght.css';
+@import '@fontsource-variable/geist-mono/wght.css';
+@import '@fontsource/instrument-serif/latin-400.css';
+@import '@fontsource/instrument-serif/latin-400-italic.css';
+
+@import 'tailwindcss';
+
+@import './tokens.css';
+@import './base.css';
+@import './utilities.css';

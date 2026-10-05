@@ -1,0 +1,205 @@
+/* ============================================================================
+   UTILITIES
+   A deliberately small set of project-level primitives. Tailwind already covers
+   the long tail — these exist only where the design system needs a named,
+   reusable behaviour: glass, grain, the 3D canvas layer and render deferral.
+   ========================================================================= */
+
+/* ---------------------------------------------------------------------
+   GLASS
+   Reserved for sticky chrome and surfaces floating above the 3D canvas —
+   places where translucency communicates "this layer is above that layer".
+   Applied to body text blocks it would just muddy the type, so it is never
+   the default card treatment. Falls back to a solid surface where
+   backdrop-filter is unsupported.
+   --------------------------------------------------------------------- */
+@utility glass {
+  background-color: var(--color-glass);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-highlight);
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    backdrop-filter: blur(20px) saturate(150%);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    background-color: color-mix(in oklab, var(--color-ink-800) 92%, transparent);
+  }
+}
+
+@utility glass-strong {
+  background-color: var(--color-glass-strong);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-e2), var(--shadow-highlight);
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    backdrop-filter: blur(28px) saturate(160%);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    background-color: color-mix(in oklab, var(--color-ink-800) 96%, transparent);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   PANEL
+   The standard raised surface. Kept square-ish (sm/md radius) with a hairline
+   top highlight so it reads as a lit plane rather than a floating pill.
+   --------------------------------------------------------------------- */
+@utility panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-e2), var(--shadow-highlight);
+}
+/* ---------------------------------------------------------------------
+   GRAIN
+   A very low-opacity noise overlay. This stops large flat ink areas from
+   banding on wide-gamut displays and gives the page a printed, physical
+   quality rather than a flat digital one. Purely decorative.
+   --------------------------------------------------------------------- */
+@utility grain {
+  position: relative;
+  isolation: isolate;
+}
+
+@utility grain-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------------------------------------------------------------------
+   LAYOUT RHYTHM
+   `section` establishes the vertical cadence of the page. Every section uses
+   it, so the rhythm is never re-decided per component.
+   --------------------------------------------------------------------- */
+@utility section {
+  position: relative;
+  padding-block: var(--spacing-section-sm);
+  scroll-margin-top: var(--header-height);
+}
+
+@media (width >= 48rem) {
+  .section {
+    padding-block: var(--spacing-section);
+  }
+}
+
+/* Horizontal gutter applied to every full-bleed section. */
+@utility gutter {
+  padding-inline: var(--spacing-gutter);
+}
+
+/* ---------------------------------------------------------------------
+   PERFORMANCE
+   `defer` hands rendering of off-screen sections to the browser, which is the
+   single biggest win for a page that will eventually carry WebGL contexts.
+   `contain-intrinsic-size` reserves the space so the scrollbar does not jump
+   as sections resolve.
+   --------------------------------------------------------------------- */
+@utility defer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+/* ---------------------------------------------------------------------
+   3D CANVAS LAYER
+   Pre-wired for React Three Fiber so the integration is a drop-in rather than
+   a retrofit.
+
+   · Sits at --z-index-canvas, below all content, so type is never occluded.
+   · `isolation: isolate` contains stacking context so WebGL layers cannot
+     bleed into the page chrome.
+   · `contain: layout paint` stops a full-bleed canvas from triggering layout
+     or paint work for the entire document.
+   · The element must have a real height (reserved via aspect-ratio) to avoid
+     layout shift when the canvas mounts asynchronously.
+   --------------------------------------------------------------------- */
+@utility canvas-layer {
+  position: relative;
+  z-index: var(--z-index-canvas);
+  isolation: isolate;
+  contain: layout paint;
+  pointer-events: none;
+}
+
+/* Re-enable interaction only on the specific 3D region that accepts it,
+   never on a full-bleed layer. `pan-y` preserves vertical page scrolling. */
+@utility canvas-interactive {
+  pointer-events: auto;
+  touch-action: pan-y;
+}
+
+/* ---------------------------------------------------------------------
+   HAIRLINES
+   Thin rules are a signature of the editorial direction: they structure
+   content without drawing boxes around it.
+   --------------------------------------------------------------------- */
+@utility rule-t {
+  border-top: 1px solid var(--color-border);
+}
+
+@utility rule-b {
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* A single warm ember hairline marking the active item in navigation.
+   Never decoration. The pseudo-element is nested inside the utility rather
+   than named separately, because Tailwind v4 does not allow a `::before`
+   selector as a standalone `@utility` name. */
+@utility rule-accent-active {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: -1px;
+    height: 1px;
+    background-color: var(--color-accent);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   WASH
+   A restrained vertical gradient used to separate adjacent full-bleed
+   sections without a hard border or a second "card". Deliberately subtle —
+   the brief rules out gradient excess.
+   --------------------------------------------------------------------- */
+@utility wash-subtle {
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in oklab, var(--color-ink-850) 55%, transparent)
+  );
+}
+/* ---------------------------------------------------------------------
+   MASKS
+   Decorative layers are masked so they dissolve into the background rather
+   than terminating against a hard edge. Without this, a full-bleed canvas or
+   image reads as a pasted rectangle instead of part of the composition.
+
+   `mask-field` fades both ends — the far edge of a perspective plane and its
+   near edge — so the object appears to emerge from and recede into the page.
+   --------------------------------------------------------------------- */
+@utility mask-field {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 24%,
+    #000 58%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 24%,
+    #000 58%,
+    transparent 100%
+  );
+}
