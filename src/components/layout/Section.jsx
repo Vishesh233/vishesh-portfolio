@@ -7,12 +7,16 @@ import { cn } from '../../lib/utils.js'
  * so any section can be linked to (`#projects`) and it will never land hidden
  * beneath the sticky header. `deferred` opts the section into
  * `content-visibility: auto`, letting the browser skip rendering work while the
- * section is off-screen — important once sections carry 3D.
+ * section is off-screen.
+ *
+ * `labelledBy` names the id of the element that labels this section — normally
+ * its own `<h2>`. That produces a real accessible name, so a screen reader
+ * announcing "region" says which region it is, rather than just "region".
  */
 export function Section({
   as: Tag = 'section',
   id,
-  label,
+  labelledBy,
   deferred = false,
   className,
   children,
@@ -21,7 +25,7 @@ export function Section({
   return (
     <Tag
       id={id}
-      aria-label={label}
+      aria-labelledby={labelledBy}
       className={cn('section', deferred && 'defer', className)}
       {...rest}
     >

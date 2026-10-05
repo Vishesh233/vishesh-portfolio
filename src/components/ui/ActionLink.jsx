@@ -3,33 +3,50 @@ import { cn } from '../../lib/utils.js'
 /**
  * Call-to-action link.
  *
- * Two variants only, because the hero needs a primary and a secondary and
- * nothing more. Both share the editorial treatment — mono, uppercase, tracked
- * out — so a row of CTAs reads as a set rather than as competing buttons.
+ * THREE VARIANTS, because the hero and the project modal genuinely have three
+ * different kinds of action. All share one editorial treatment — mono, small,
+ * tracked out, modest radius — so a row of CTAs reads as a set rather than as
+ * competing buttons.
  *
- * `primary` is an ember fill and is reserved for the single most important
- * action on a view. `ghost` is a hairline and is used for everything else, so
- * the accent never stops meaning "this is the one".
+ * · `primary` — a coral fill. Reserved for the single most important action in
+ *   a view, so the accent never stops meaning "this is the one".
+ * · `ghost` — a hairline. Everything else, so it stays quiet.
+ * · `quiet` — text plus an arrow, no box at all. For tertiary actions inside
+ *   dense rows such as a modal footer.
  *
- * Renders an anchor, since both destinations are on-page sections. Focus and
- * hover styling come from the global base layer, so they are consistent here.
+ * RENDERS AN ANCHOR because every destination here is a real URL: an on-page
+ * section, an external site, or a file to download. External and file targets
+ * are the caller's decision, expressed through the `external` and `download`
+ * props rather than by hand-writing `target` and `rel` each time.
  */
 export function ActionLink({
   href,
   children,
   variant = 'ghost',
+  /** Opens in a new tab with `rel="noopener noreferrer"`. */
+  external = false,
+  /** Triggers a download; `value` is the saved filename. */
+  download,
   className,
   ...rest
 }) {
+  const isQuiet = variant === 'quiet'
+
   return (
     <a
       href={href}
+      download={download}
+      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       className={cn(
-        'group inline-flex items-center gap-3 rounded-sm px-5 py-3 font-mono text-caption uppercase tracking-wide',
-        'transition-colors duration-300',
-        variant === 'primary'
-          ? 'bg-accent text-accent-on hover:bg-accent-hover'
-          : 'border border-border-strong text-foreground hover:border-accent hover:text-accent',
+        'group inline-flex items-center gap-2 rounded-sm font-mono text-caption',
+        'transition-colors duration-200',
+        isQuiet
+          ? 'px-0 py-1 text-muted hover:text-accent-ink'
+          : 'px-5 py-3',
+        variant === 'primary' &&
+          'bg-accent text-accent-on hover:bg-accent-hover',
+        variant === 'ghost' &&
+          'border border-border-strong text-foreground hover:border-accent hover:text-accent-ink',
         className,
       )}
       {...rest}
@@ -39,7 +56,7 @@ export function ActionLink({
       {/* Arrow nudges on hover only — a small confirmation of direction. */}
       <span
         aria-hidden="true"
-        className="transition-transform duration-300 group-hover:translate-x-1"
+        className="transition-transform duration-200 group-hover:translate-x-0.5"
       >
         →
       </span>

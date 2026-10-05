@@ -44,13 +44,17 @@ export const feedbackTransition = {
 }
 
 /**
- * Section entrance. Translates a short distance upward and fades in.
+ * Section entrance.
  *
- * The Y offset is small on purpose: large travel reads as "animation", small
- * travel reads as "the page settling".
+ * Starts from a VISIBLE state on purpose: opacity 0.72 and a 12px offset, not 0.
+ * The page is therefore complete and legible at every instant — before the
+ * observer fires, if motion never runs at all, and while the element is still
+ * scrolling into view. A reveal that begins from nothing risks leaving a blank
+ * block on the page if anything interrupts it, and a 12px settle reads as
+ * "content arriving" rather than as an animation being performed.
  */
 export const sectionVariants = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0.72, y: 12 },
   visible: {
     opacity: 1,
     y: 0,
@@ -60,7 +64,7 @@ export const sectionVariants = {
 
 /** Fades without translating. For text that should not appear to move. */
 export const fadeVariants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0.72 },
   visible: { opacity: 1, transition: enterTransition },
 }
 

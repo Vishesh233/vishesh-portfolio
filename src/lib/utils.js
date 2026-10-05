@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 /**
  * Small, dependency-free helpers shared across the app.
  */
@@ -14,63 +16,116 @@ export function cn(...classes) {
 }
 
 /**
- * Reveals an element once it scrolls into view.
+ * Which section is the reader currently in.
  *
- * Deliberately hand-rolled rather than pulled from a library: the portfolio
- * needs exactly one IntersectionObserver behaviour, and the future 3D layer
- * must be able to reuse the same "am I on screen?" signal to pause its render
- * loop when off-screen. Returns an `unobserve` cleanup so callers controlling
- * a canvas can cancel the observation.
+ * WHY INTERSECTIONOBSERVER AND NOT A SCROLL LISTENER
+ * A scroll handler would run on every frame and recompute geometry for every
+ * section. IntersectionObserver is handed to the browser and evaluated off the
+ * main thread, so the cost is effectively zero while idle.
  *
- * @param {Element|null} element
- * @param {{ threshold?: number, rootMargin?: string }} [options]
- * @returns {() => void} cleanup function
+ * WHY THIS DOESN'T SIMPLY PICK THE "MOST VISIBLE" SECTION
+ * That approach breaks on short sections and at the very top and bottom of the
+ * document: when the page is scrolled to the end, the last short section can
+ * never reach the threshold that a tall one does, so the highlight sticks to
+ * the previous entry. Instead this tracks every section's position against a
+ * reading line a little below the top of the viewport, and marks whichever
+ * section that line falls inside. Short and tall sections are treated
+ * identically, and the last section always wins at the bottom of the page.
+ *
+ * The reading line sits below the sticky header because the header covers the
+ * top of the viewport — highlighting a section that is only visible behind the
+ * header would feel wrong.
  */
-export function observeVisibility(element, options = {}) {
-  const { threshold = 0.15, rootMargin = '0px 0px -10% 0px' } = options
+export function useActiveSection(ids) {
+  const [activeId, setActiveId] = useState(() => ids[0] ?? null)
 
-  if (!element) return () => {}
+  useEffect(() => {
+    // Re-run whenever the section list changes, so adding a section to the
+    // registry is enough to have it tracked.
+    if (ids.length === 0) return
+    if (typeof IntersectionObserver === 'undefined') return
 
-  // No IntersectionObserver (or SSR/prerender): assume visible so content is
-  // never permanently hidden.
-  if (typeof IntersectionObserver === 'undefined') return () => {}
+    const elements = ids
+      .map((id) => document.getElementById(id))
+      .filter(Boolean)
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        entry.target.dispatchEvent(
-          new CustomEvent('visibilitychange', {
-            detail: { isVisible: entry.isIntersecting },
-          }),
-        )
+    if (elements.length === 0) return
+
+    // Visible band, offset to clear the sticky header and to ignore the last
+    // ~25% of the viewport so the next section is not highlighted before the
+    // reader has actually arrived at it.
+    const headerOffset = getHeaderOffset()
+    const readingLine = window.innerHeight * 0.35
+
+    /**
+     * Chooses the active section from current geometry.
+     * Called on every observed change rather than trusting each entry in
+     * isolation, because a single intersection callback can fire for several
+     * sections at once and no individual entry knows about the others.
+     */
+    const update = () => {
+      let current = null
+
+      for (const element of elements) {
+        const rect = element.getBoundingClientRect()
+
+        // A section counts as active once its top has passed the reading line.
+        // Past the bottom of the document the last section is the answer, and
+        // this condition handles that case without a special-case branch.
+        if (rect.top - headerOffset <= readingLine) {
+          current = element.id
+        }
       }
-    },
-    { threshold, rootMargin },
-  )
 
-  observer.observe(element)
+      // Above the very first section (overscroll, or a restored scroll
+      // position): fall back to the first one rather than leaving nothing lit.
+      if (current === null) current = elements[0].id
 
-  return () => observer.disconnect()
+      setActiveId((previous) => (previous === current ? previous : current))
+    }
+
+    const observer = new IntersectionObserver(update, {
+      // Any change in the observed band can move the answer, so fire on entry
+      // and exit rather than at a set of discrete ratios.
+      threshold: [0, 0.25, 0.5, 0.75, 1],
+    })
+
+    for (const element of elements) observer.observe(element)
+
+    // Recompute on resize: the reading line is a fraction of the viewport, so
+    // a change in height can move which section is active even when nothing
+    // intersected differently.
+    window.addEventListener('resize', update, { passive: true })
+
+    // Establish the correct value immediately — on a reload the browser
+    // restores the previous scroll position, and without this the highlight
+    // would be wrong until the reader scrolled.
+    update()
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', update)
+    }
+  }, [ids])
+
+  return activeId
 }
 
 /**
- * Formats a year range from optional ISO dates.
- *
- * Returns an em dash when a date is unknown, so a missing end date can never
- * be rendered as a fabricated one.
+ * Reads the sticky header's height from the CSS custom property that tokens.css
+ * defines, so the reading line and the header can never disagree.
  */
-export function formatDateRange(start, end) {
-  const format = (value) => {
-    if (!value) return null
-    const date = new Date(value)
-    if (Number.isNaN(date.getTime())) return null
-    return String(date.getFullYear())
-  }
+function getHeaderOffset() {
+  if (typeof window === 'undefined') return 0
 
-  const from = format(start)
-  const to = format(end)
+  const raw = getComputedStyle(document.documentElement)
+    .getPropertyValue('--header-height')
+    .trim()
 
-  if (from && to) return `${from} — ${to}`
-  if (from) return `${from} — Present`
-  return null
+  // "4.25rem" -> 68px. Any unexpected format falls back to 0, which only makes
+  // the highlight slightly early rather than breaking it.
+  const parsed = Number.parseFloat(raw)
+  if (!Number.isFinite(parsed)) return 0
+
+  return raw.endsWith('rem') ? parsed * 16 : parsed
 }

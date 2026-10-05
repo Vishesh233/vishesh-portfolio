@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { sectionVariants, duration, easing } from '../../lib/motion.js'
+import { sectionVariants } from '../../lib/motion.js'
 
 /**
  * Scroll-triggered entrance wrapper.
@@ -8,17 +8,24 @@ import { sectionVariants, duration, easing } from '../../lib/motion.js'
  * Components using this never check the preference themselves — they ask for an
  * entrance and this component decides whether to animate it.
  *
- * When motion is reduced the element renders in its final state immediately
- * (`initial={false}`), rather than fading in with a shortened duration. That
- * matters for accessibility: a reduced-motion user should never wait on an
+ * WHEN MOTION IS REDUCED
+ * The element renders in its final state immediately, rather than fading in
+ * with a shortened duration. A reduced-motion user should never wait on an
  * animation at all, and nothing should ever be hidden behind one.
  *
+ * STARTING FROM A VISIBLE STATE
+ * `sectionVariants.hidden` sits at opacity 0.72 with a 12px offset, not 0. Even
+ * in the window between mount and the observer firing, the content is legible
+ * and correctly placed — if JavaScript is slow, blocked or the element is
+ * rendered by a crawler without motion, the reader sees a complete page rather
+ * than a blank one. The animation reads as content settling into place, which
+ * is also a far smaller visual commitment than a fade from nothing.
+ *
  * `viewport.once` means an element animates the first time it is seen and then
- * stops observing, which keeps long pages from animating on every scroll pass.
+ * stops observing, so a long page does not re-animate on every scroll pass.
  */
 export function Reveal({
   as = 'div',
-  delay = 0,
   variants = sectionVariants,
   className,
   children,
@@ -41,8 +48,10 @@ export function Reveal({
       variants={variants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: '0px 0px -12% 0px' }}
-      transition={{ delay, duration: duration.slow, ease: easing.outExpo }}
+      // A negative bottom margin triggers the reveal slightly before the
+      // element is fully on screen, so motion is already settling by the time
+      // the reader looks at it.
+      viewport={{ once: true, margin: '0px 0px -10% 0px' }}
       {...rest}
     >
       {children}
