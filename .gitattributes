@@ -1,0 +1,20 @@
+# Normalise line endings so the working tree stops churning CRLF<->LF.
+# Text files are checked out with LF on Windows and stored with LF in the repo.
+* text=auto eol=lf
+
+*.js    text eol=lf
+*.jsx   text eol=lf
+*.css   text eol=lf
+*.html  text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+*.svg   text eol=lf
+
+# Binary assets must never be line-ending normalised or diffed as text.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.pdf   binary
+*.woff  binary
+*.woff2 binary
