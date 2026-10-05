@@ -84,6 +84,14 @@ export function AlertIcon({ className }) {
   )
 }
 
+export function CloseIcon({ className }) {
+  return (
+    <Svg className={className}>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </Svg>
+  )
+}
+
 export function ArrowIcon({ className }) {
   return (
     <Svg className={className}>

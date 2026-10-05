@@ -4,6 +4,7 @@ import { Container } from './components/layout/Container.jsx'
 import { Hero } from './components/sections/Hero.jsx'
 import { About } from './components/sections/About.jsx'
 import { Skills } from './components/sections/Skills.jsx'
+import { Projects } from './components/sections/Projects.jsx'
 
 /**
  * Application shell.
@@ -41,6 +42,7 @@ export default function App() {
         <Hero />
         <About deferred />
         <Skills deferred />
+        <Projects deferred />
       </main>
 
       <footer className="border-t border-border">

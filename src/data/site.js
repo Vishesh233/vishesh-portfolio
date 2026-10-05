@@ -157,102 +157,102 @@ export const leadership = [
 /**
  * Verified projects.
  *
+ * `image` names the entry in src/assets/projects/images.json. Resolution to a
+ * URL and a `srcset` happens in src/lib/images.js, so the dimensions here are
+ * never hand-written and can never drift from the files on disk.
+ *
  * `liveUrl` is set only for InterviewPilot, from that repository's own
  * homepage field. LibVerse and QR Code Studio have `liveUrl: null`, and every
  * consumer treats a null liveUrl as "render no Live Demo button at all".
  *
- * `image` is a lazy import function so Vite can fingerprint and optimise the
- * file; `width`/`height` are the real intrinsic pixel dimensions read off disk,
- * so the browser reserves the correct box and the page never shifts when the
- * image loads.
+ * `categoryLabel` is the short form shown on a card; `category` is the longer
+ * form shown in the modal. Both describe what the project is, neither asserts
+ * anything beyond it.
  *
- * Stack entries are limited to what is verifiable. For InterviewPilot the
- * package.json files and repository topics confirm the frameworks and the
- * Gemini API integration; nothing beyond that is claimed.
+ * NO PROBLEM / SOLUTION / IMPACT BLOCK
+ * The features below are the verified capability list. There is deliberately no
+ * framing of the form "the problem was X, so we did Y, which achieved Z" —
+ * those claims would have to be invented, and an invented impact number is
+ * worse than no impact section at all.
  */
 export const projects = [
   {
     id: 'libverse',
     name: 'LibVerse',
-    tagline: 'Role-based library management',
-    summary:
-      'A role-based library management system with separate portals for Students, Librarians and Super Admins.',
-    category: 'Full-Stack Application',
-    image: () => import('../assets/projects/libverse.png'),
+    image: 'libverse',
     imageAlt:
       'LibVerse interface showing the library management dashboard with book records and role-based navigation.',
-    width: 1919,
-    height: 1048,
-    stack: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'JWT'],
+    category: 'Full-stack web app',
+    tagline: 'Role-based library management',
+    summary:
+      'A library management system built around role-based access control, with a separate portal for each of the three user roles and a shared catalogue underneath.',
     repository: 'https://github.com/Vishesh233/LibVerse',
     liveUrl: null,
     overview:
-      'LibVerse is a library management system built around role-based access control. A custom JWT auth middleware guards the API, and each of the three roles — Student, Librarian and Super Admin — gets its own portal with the features that role actually needs.',
+      'LibVerse is a full-stack library management system organised around role-based access control. A custom JWT auth middleware guards the API, and the three roles — Student, Librarian and Super Admin — each get their own portal containing the features that role actually needs rather than one shared interface with hidden buttons.',
     features: [
-      'Role-based portals for Student, Librarian and Super Admin (50+ features)',
-      'Custom JWT authentication middleware applied across the API',
+      'Role-based access control with JWT authentication across Student, Librarian and Super Admin portals (50+ features)',
       'Book CRUD with search and filtering',
-      'Wishlists, and issue / return workflows',
+      'Wishlists',
+      'Issue and return workflows',
       'Image upload handled with Multer and Sharp',
-      'Analytics dashboards over 1,000+ simulated records',
+      'Analytics dashboards built on 1,000+ simulated records',
       'Reusable components and custom hooks that cut duplicate UI code by 40%',
     ],
+    stack: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'JWT'],
     notes:
-      'Dashboard data is generated rather than drawn from a live catalogue, and is labelled as simulated throughout the interface.',
+      'Dashboard figures are generated rather than drawn from a live catalogue, and are labelled as simulated throughout the interface.',
   },
   {
     id: 'interviewpilot',
     name: 'InterviewPilot',
-    tagline: 'AI-assisted interview preparation',
-    summary:
-      'Turns a job description into a structured preparation plan, with company and requirements research.',
-    category: 'Web Platform',
-    image: () => import('../assets/projects/interviewpilot.png'),
+    image: 'interviewpilot',
     imageAlt:
       'InterviewPilot interface showing a generated interview preparation plan built from a job description.',
-    width: 1917,
-    height: 887,
-    stack: ['Next.js', 'React', 'Node.js', 'Express', 'MongoDB', 'JWT', 'Gemini API'],
+    category: 'AI-assisted web app',
+    tagline: 'Interview preparation from a job description',
+    summary:
+      'Turns a job description into a structured preparation plan — personalized questions, coverage maps, schedules, flashcards and practice sessions.',
     repository: 'https://github.com/Vishesh233/InterviewPilot',
     liveUrl: 'https://interview-pilot-ten.vercel.app',
-    /** Shown under the Live Demo button so visitors are not surprised by a gate. */
     liveUrlNote: 'Sign-in required',
     overview:
-      'InterviewPilot turns a pasted job description into a structured preparation plan. It researches the company and the requirements in the posting, then uses that research to shape what the practice material covers.',
+      'InterviewPilot takes a pasted job description and turns it into a structured preparation plan. The generated material is drawn from the posting itself, so what you practise is shaped by what the role actually asked for.',
     features: [
-      'Generates a preparation plan from a pasted job description',
-      'Researches the company and the requirements in the posting',
-      'Shapes practice material around what the research surfaces',
-      'Front end and API in separate applications within one repository',
-      'Backend test suite and a repeatable evaluation script',
+      'Personalized questions generated from a job description',
+      'Coverage maps',
+      'Schedules',
+      'Flashcards',
+      'Practice sessions',
     ],
-    notes: 'The AI integration uses the Gemini API, which is a listed repository topic.',
+    stack: ['Next.js', 'React', 'Node.js', 'Express', 'MongoDB', 'JWT', 'Gemini API'],
+    notes:
+      'The feature list above is the project description taken from the repository. The AI integration uses the Gemini API, which is a listed repository topic.',
   },
   {
     id: 'qr-code-studio',
     name: 'QR Code Studio v2',
-    tagline: 'Desktop QR generation and scanning',
-    summary:
-      'A modular desktop app for generating, customising, exporting and scanning QR codes.',
-    category: 'Desktop Application',
-    image: () => import('../assets/projects/qr-code-studio.png'),
+    image: 'qr-code-studio',
     imageAlt:
       'QR Code Studio v2 desktop interface with QR code generation settings and a live preview panel.',
-    width: 1919,
-    height: 1192,
-    stack: ['Python', 'OpenCV', 'Pyzbar', 'CustomTkinter'],
+    category: 'Python desktop app',
+    tagline: 'QR code generation and scanning',
+    summary:
+      'A modular desktop application for generating, customising, exporting and scanning QR codes, with four switchable themes.',
     repository: 'https://github.com/Vishesh233/QR-Code-Studio-v2',
     liveUrl: null,
     overview:
-      'QR Code Studio v2 is a desktop application for working with QR codes end to end — generating them with customisation, previewing the result live, exporting it as an image, and reading codes back with the built-in scanner.',
+      'QR Code Studio v2 is a desktop application covering QR codes end to end: generating them with a logo embedded and custom colours, previewing the result live, exporting it as an image, and reading codes back with the built-in scanner.',
     features: [
-      'Modular codebase — 15+ files and 10+ reusable UI components',
-      'QR generation with logo embedding and colour customisation',
-      'Live preview of the generated code',
+      'QR generation with logo embedding',
+      'Colour customisation',
+      'Live preview',
       'Image export',
-      'Real-time scanning',
+      'Real-time scanner',
       '4 built-in themes with switching at runtime',
+      'Modular OOP architecture — 15+ files and 10+ reusable UI components',
     ],
+    stack: ['Python', 'OpenCV', 'Pyzbar', 'CustomTkinter'],
   },
 ]
 /**

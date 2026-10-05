@@ -5,7 +5,9 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  // dist is the build output. .ssr-out holds a throwaway server-render bundle
+  // used by the markup checks; neither is source.
+  globalIgnores(['dist', '.ssr-out']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [
