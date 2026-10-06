@@ -92,6 +92,36 @@ export function CloseIcon({ className }) {
   )
 }
 
+export function CapIcon({ className }) {
+  return (
+    <Svg className={className}>
+      <path d="M12 4.5 2.75 9 12 13.5 21.25 9 12 4.5Z" />
+      <path d="M6.75 11.4v4.1c0 1.5 2.35 2.75 5.25 2.75s5.25-1.25 5.25-2.75v-4.1" />
+      <path d="M21.25 9v5.25" />
+    </Svg>
+  )
+}
+
+export function AwardIcon({ className }) {
+  return (
+    <Svg className={className}>
+      <circle cx="12" cy="9.25" r="5.25" />
+      <path d="m9.1 13.75-1.5 6 4.4-2.35 4.4 2.35-1.5-6" />
+    </Svg>
+  )
+}
+
+export function BuildingIcon({ className }) {
+  return (
+    <Svg className={className}>
+      <path d="M4.5 20.5h15" />
+      <path d="M6.5 20.5V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v15.5" />
+      <path d="M9.5 7.5h1.5M13 7.5h1.5M9.5 11h1.5M13 11h1.5M9.5 14.5h1.5M13 14.5h1.5" />
+      <path d="M10.5 20.5v-3h3v3" />
+    </Svg>
+  )
+}
+
 export function ArrowIcon({ className }) {
   return (
     <Svg className={className}>

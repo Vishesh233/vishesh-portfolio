@@ -1,10 +1,12 @@
 import { SkipLink } from './components/layout/SkipLink.jsx'
 import { SiteHeader } from './components/layout/SiteHeader.jsx'
-import { Container } from './components/layout/Container.jsx'
+import { SiteFooter } from './components/layout/SiteFooter.jsx'
 import { Hero } from './components/sections/Hero.jsx'
 import { About } from './components/sections/About.jsx'
 import { Skills } from './components/sections/Skills.jsx'
+import { Education } from './components/sections/Education.jsx'
 import { Projects } from './components/sections/Projects.jsx'
+import { Contact } from './components/sections/Contact.jsx'
 
 /**
  * Application shell.
@@ -23,10 +25,9 @@ import { Projects } from './components/sections/Projects.jsx'
  * over the plain `--color-background`.
  *
  * SECTION ORDER
- * Home, About, Skills, Projects, Education, Contact — matching the `sections`
- * registry in src/data/site.js, which the header's scroll-spy also reads. About
- * and Skills are mounted now; Projects, Education and Contact arrive in the
- * later stages, and their nav links resolve as each section lands.
+ * Hero, About, Skills, Education, Projects, Contact — matching the `sections`
+ * registry in src/data/site.js, which the header's scroll-spy also reads, so
+ * every nav link resolves to a section that is actually mounted.
  *
  * `deferred` hands off-screen sections to the browser via content-visibility.
  * It is NOT applied to the hero, which is on screen immediately.
@@ -42,19 +43,12 @@ export default function App() {
         <Hero />
         <About deferred />
         <Skills deferred />
+        <Education deferred />
         <Projects deferred />
+        <Contact />
       </main>
 
-      <footer className="border-t border-border">
-        <Container width="wide" className="flex flex-col gap-2 py-10">
-          <p className="font-mono text-caption text-muted">
-            © {new Date().getFullYear()} Vishesh Khanna
-          </p>
-          <p className="font-mono text-caption text-subtle">
-            Built with React, Vite &amp; Tailwind
-          </p>
-        </Container>
-      </footer>
+      <SiteFooter />
     </>
   )
 }

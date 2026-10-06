@@ -93,15 +93,23 @@ export const skillGroups = [
   { id: 'libraries', label: 'Libraries', items: ['OpenCV', 'CustomTkinter'] },
 ]
 
-/** Education. Dates are the supplied range, not inferred. */
-export const education = {
-  degree: 'B.Tech in Computer Science and Engineering',
-  institution: 'College of Engineering Roorkee',
-  period: '2022 — 2026',
-  startMonth: 'September 2022',
-  endMonth: 'July 2026',
-  coursework: ['Data Structures and Algorithms', 'Operating Systems', 'DBMS'],
-}
+/**
+ * Education history as an array from the outset, so the timeline is extensible
+ * with data rather than markup. Dates are the supplied range, not inferred, and
+ * `note` restates a verified fact rather than an invented achievement.
+ */
+export const education = [
+  {
+    id: 'coer-btech',
+    institution: 'College of Engineering Roorkee',
+    shortName: 'COER',
+    degree: 'B.Tech in Computer Science and Engineering',
+    startMonth: 'September 2022',
+    endMonth: 'July 2026',
+    coursework: ['Data Structures and Algorithms', 'Operating Systems', 'DBMS'],
+    note: '80+ DSA problems solved on LeetCode and NeetCode',
+  },
+]
 
 /**
  * Certifications and programmes.
@@ -138,19 +146,24 @@ export const certifications = [
   },
 ]
 
-/** Leadership and volunteering. */
+/**
+ * Leadership and volunteering. `activities` lists only the named activities
+ * from the content review; `detail` stays null rather than inventing one.
+ */
 export const leadership = [
   {
     id: 'praharsh',
     role: 'Core Member',
     organisation: 'Praharsh',
     detail: 'College social welfare club',
+    activities: ['Blood donation drives', 'Clothing drives'],
   },
   {
     id: 'unnat-bharat',
     role: 'Volunteer',
     organisation: 'Unnat Bharat Abhiyan',
     detail: null,
+    activities: ['Village outreach with plants and school supplies'],
   },
 ]
 
@@ -194,6 +207,7 @@ export const projects = [
       'Role-based access control with JWT authentication across Student, Librarian and Super Admin portals (50+ features)',
       'Book CRUD with search and filtering',
       'Wishlists',
+      'Personalised book recommendations',
       'Issue and return workflows',
       'Image upload handled with Multer and Sharp',
       'Analytics dashboards built on 1,000+ simulated records',
@@ -219,6 +233,7 @@ export const projects = [
     overview:
       'InterviewPilot takes a pasted job description and turns it into a structured preparation plan. The generated material is drawn from the posting itself, so what you practise is shaped by what the role actually asked for.',
     features: [
+      'Researches the company and the role\'s requirements',
       'Personalized questions generated from a job description',
       'Coverage maps',
       'Schedules',
