@@ -8,11 +8,19 @@ import { cn } from '../../lib/utils.js'
  * tracked out, modest radius — so a row of CTAs reads as a set rather than as
  * competing buttons.
  *
- * · `primary` — a coral fill. Reserved for the single most important action in
+ * · `primary` — a cyan fill. Reserved for the single most important action in
  *   a view, so the accent never stops meaning "this is the one".
  * · `ghost` — a hairline. Everything else, so it stays quiet.
  * · `quiet` — text plus an arrow, no box at all. For tertiary actions inside
  *   dense rows such as a modal footer.
+ *
+ * PRESS FEEDBACK: every variant dips to 98% while `:active`, gated behind
+ * `motion-safe:` so reduced-motion readers keep a static press. A click
+ * should feel acknowledged before the destination resolves. Boxed variants
+ * also carry the shared hover-pop (`pop-strong` in utilities.css): lift, cyan
+ * hairline and shadow, gated on hover-capable pointers and neutralised under
+ * `prefers-reduced-motion`. The quiet variant
+ * stays colour-only, because a text link moving fights the reading path.
  *
  * RENDERS AN ANCHOR because every destination here is a real URL: an on-page
  * section, an external site, or a file to download. External and file targets
@@ -46,14 +54,16 @@ export function ActionLink({
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       className={cn(
         'group inline-flex items-center gap-2 rounded-sm font-mono text-caption',
-        'transition-colors duration-200',
+        // `transition` (all relevant properties, not just colour) so the press
+        // scale below animates as well as the hover colour change.
+        'transition duration-200',
         isQuiet
           ? 'px-0 py-1 text-muted hover:text-accent-ink'
-          : 'px-5 py-3',
+          : 'pop-strong px-5 py-3 motion-safe:active:scale-[0.98]',
         variant === 'primary' &&
           'bg-accent text-accent-on hover:bg-accent-hover',
         variant === 'ghost' &&
-          'border border-border-strong text-foreground hover:border-accent hover:text-accent-ink',
+          'border border-border-strong text-foreground hover:text-accent-ink',
         className,
       )}
       {...rest}

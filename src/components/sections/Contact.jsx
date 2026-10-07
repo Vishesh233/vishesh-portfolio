@@ -21,8 +21,8 @@ export function Contact() {
   return (
     <Section id="contact" labelledBy="contact-heading">
       <Container width="wide">
-        <div className="flex flex-col gap-4">
-          <Reveal as="p" className="font-mono text-micro tracking-widest text-subtle uppercase">
+        <div className="flex flex-col items-center gap-4 text-center">
+          <Reveal as="p" className="font-mono text-micro tracking-widest text-accent-ink uppercase">
             Contact
           </Reveal>
 
@@ -30,7 +30,7 @@ export function Contact() {
             Get In Touch
           </Reveal>
 
-          <Reveal as="p" className="max-w-[54ch] text-body text-muted">
+          <Reveal as="p" className="mx-auto max-w-[54ch] text-body text-muted">
             Send a message through the form below, or reach out directly by
             email, GitHub or LinkedIn.
           </Reveal>

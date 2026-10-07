@@ -8,7 +8,9 @@
    `glass`/`glass-strong` (glassmorphism is out), `grain`/`grain-overlay` (the
    direction is clean, not printed), `panel` (replaced by `card`),
    `wash-subtle`, `mask-field`, `canvas-layer` and `canvas-interactive` (all
-   belonged to the deleted 3D lattice and SVG plate system).
+   belonged to the deleted 3D lattice and SVG plate system), plus the retired
+    `gutter`, `rule-t` and `rule-b` (each retired as dead code, with a note at
+    its original site).
    ========================================================================= */
 
 /* ---------------------------------------------------------------------
@@ -23,19 +25,10 @@
   box-shadow: var(--shadow-e1);
 }
 
-/* `card` plus the hover treatment, for anything that lifts on pointer.
-   Framer Motion owns the transform; this owns colour and shadow, so the two
-   never fight over the same property. */
-@utility card-interactive {
-  transition-property: border-color, box-shadow;
-  transition-duration: 250ms;
-  transition-timing-function: var(--ease-out-quart);
-
-  &:hover {
-    border-color: var(--color-border-strong);
-    box-shadow: var(--shadow-e3);
-  }
-}
+/* `card-interactive` (per-surface hover border/shadow) was retired here once
+   the hover-pop treatment at the bottom of this file existed: pop owns
+   transform, border and shadow together, so a second hover implementation
+   would only fight it over the same properties for the same moment. */
 /* ---------------------------------------------------------------------
    LAYOUT RHYTHM
    `section` establishes the vertical cadence of the page. Every section uses
@@ -53,10 +46,8 @@
   }
 }
 
-/* Horizontal gutter applied to every full-bleed section. */
-@utility gutter {
-  padding-inline: var(--spacing-gutter);
-}
+/* Horizontal gutter applied to every full-bleed section — retired as dead
+   code: Container owns horizontal padding via `px-gutter`. */
 
 /* ---------------------------------------------------------------------
    PERFORMANCE
@@ -73,28 +64,117 @@
    HAIRLINES
    Thin rules structure content without drawing boxes around it.
    --------------------------------------------------------------------- */
-@utility rule-t {
-  border-top: 1px solid var(--color-border);
+/* `rule-t` and `rule-b` lived here and were removed as dead code — nothing
+   referenced them, and borders are drawn per component. */
+
+/* `rule-accent-active` — the accent underline that marked the active
+   navigation item — was retired with the pill nav: the active item is now a
+   filled pill carrying its own hairline and shadow, which reports "you are
+   here" without a pseudo-element. */
+
+/* ---------------------------------------------------------------------
+   HOVER POP
+   The one shared hover treatment. Every interactive surface — project,
+   skill and info cards, buttons, nav pills, chips, icon links —
+   lifts 4px, scales slightly, adopts a cyan hairline and a stronger shadow.
+   One implementation means the affordance feels identical everywhere, and
+   the scale differs only by size (controls 1.04, surfaces 1.02) without the
+   pattern fragmenting.
+
+   GATE STACK, in order:
+   · `@media (hover: hover)` — touch devices never get a hover state stuck
+     from a tap, so the lift lives only where a real pointer exists.
+   · `:focus-visible` — keyboard users get the same affordance a pointer
+     does, outside the hover query because focus works without a pointer.
+   · `prefers-reduced-motion` — colour and shadow remain (they carry the
+     meaning of the affordance); movement does not. base.css's global rule
+     additionally collapses the transition to an instant change.
+   --------------------------------------------------------------------- */
+.pop,
+.pop-strong {
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out,
+    border-color 200ms ease-out,
+    color 200ms ease-out;
 }
 
-@utility rule-b {
-  border-bottom: 1px solid var(--color-border);
-}
-
-/* A single warm accent underline marking the active navigation item. Never
-   decoration — it reports where you are. The pseudo-element is nested inside
-   the utility rather than named separately, because Tailwind v4 does not allow
-   a `::before` selector as a standalone `@utility` name. */
-@utility rule-accent-active {
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset-inline: 0;
-    bottom: -0.35rem;
-    height: 2px;
-    border-radius: var(--radius-full);
-    background-color: var(--color-accent);
+@media (hover: hover) {
+  .pop:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: var(--color-pop-border);
+    box-shadow: var(--shadow-pop);
   }
+
+  .pop-strong:hover {
+    transform: translateY(-4px) scale(1.04);
+    border-color: var(--color-pop-border);
+    box-shadow: var(--shadow-pop);
+  }
+}
+
+.pop:focus-visible,
+.pop-strong:focus-visible {
+  transform: translateY(-4px) scale(1.02);
+  border-color: var(--color-pop-border);
+  box-shadow: var(--shadow-pop);
+}
+
+.pop-strong:focus-visible {
+  transform: translateY(-4px) scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop:hover,
+  .pop:focus-visible,
+  .pop-strong:hover,
+  .pop-strong:focus-visible {
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   SCROLL HINT
+   The hero's scroll-down arrow: a gentle 2D translate loop. Static under
+   reduced motion — here in the query, and again by base.css's global
+   animation kill, which also collapses the loop if it is mid-flight.
+   --------------------------------------------------------------------- */
+@keyframes scroll-hint {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+.scroll-hint {
+  animation: scroll-hint 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   GRADIENT NAME
+   The hero h1. Stops come from theme tokens: light is a flat text-safe
+   blue (a cyan end-stop cannot clear AA as display text on the sky page),
+   dark runs sky → cyan. The gradient paints the glyphs via
+   `background-clip: text`; the theme resolved the stops, so contrast is a
+   token-level guarantee, not a per-use one.
+   --------------------------------------------------------------------- */
+.text-gradient-name {
+  background-image: linear-gradient(
+    90deg,
+    var(--gradient-name-from),
+    var(--gradient-name-to)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }

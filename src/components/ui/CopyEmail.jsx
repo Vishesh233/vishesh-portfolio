@@ -74,12 +74,12 @@ export function CopyEmail({ className = '' }) {
         aria-label={label}
         title={label}
         className={[
-          'grid size-7 place-items-center rounded-sm border transition-colors duration-200',
+          'pop-strong grid size-7 place-items-center rounded-sm border transition-colors duration-200',
           status === 'copied'
             ? 'border-accent text-accent-ink'
             : status === 'failed'
               ? 'border-accent text-accent-ink'
-              : 'border-border text-muted hover:border-accent hover:text-accent-ink',
+              : 'border-border text-muted hover:text-accent-ink',
         ].join(' ')}
       >
         {status === 'copied' ? (

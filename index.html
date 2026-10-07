@@ -2,36 +2,91 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      Favicon — a single SVG monogram: resolution-independent, one small file,
+      no PNG set to keep in sync.
+    -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!--
+      Colour plumbing.
+
+      `color-scheme` tells the browser to paint its own widgets (form controls,
+      scrollbars) in the page's palette instead of forcing platform defaults.
+      `theme-color` paints the browser chrome itself. Light and dark values
+      are both declared with a media condition so the address bar follows the
+      active theme without waiting for JavaScript.
+    -->
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#FFF8F0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#F4F9FF" media="(prefers-color-scheme: light)" />
     <meta
       name="theme-color"
-      content="#15130F"
+      content="#050B1A"
       media="(prefers-color-scheme: dark)"
     />
 
-    <title>Vishesh Khanna — Full-Stack Software Engineer</title>
+    <!--
+      The searchable identity of the page — the pair search engines most often
+      show verbatim. The title follows a fixed "name | role" pattern so it is
+      distinctive in a tab full of tabs; the description is the one-line pitch
+      that sits under it in results. `index, follow` states indexing intent
+      explicitly rather than relying on the default. The same two strings are
+      reused by the social previews below, so the tab, the search result and
+      the shared link all say the same thing.
+    -->
+    <title>Vishesh Khanna | Full-Stack Software Engineer</title>
     <meta
       name="description"
       content="Vishesh Khanna — full-stack software engineer building web applications with React, Node.js, Express and MongoDB."
     />
+    <meta name="robots" content="index, follow" />
 
+    <!--
+      Canonical — where this page lives once deployed. Deliberately empty for
+      now: an empty or wrong canonical is worse than none, so it fills in with
+      the production URL the day the site has a public host (TODO(deploy)).
+    -->
+    <link rel="canonical" href="" />
+
+    <!--
+      Open Graph — what Facebook, LinkedIn and Slack show when the URL is
+      pasted. `og:title`, `og:description` and `og:type` are the fields every
+      scraper reads; `og:site_name` labels the preview with the site rather
+      than the page. `og:image` must be an ABSOLUTE URL to be picked up at
+      all, so it points at the real file in public/ with a TODO to swap in
+      https://<host>/og-image.png once the deployment URL exists
+      (TODO(deploy); the image itself already ships).
+    -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Vishesh Khanna — Full-Stack Software Engineer" />
+    <meta property="og:site_name" content="Vishesh Khanna — Portfolio" />
+    <meta property="og:title" content="Vishesh Khanna | Full-Stack Software Engineer" />
     <meta
       property="og:description"
       content="Vishesh Khanna — full-stack software engineer building web applications with React, Node.js, Express and MongoDB."
     />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="/og-image.png" />
+
+    <!--
+      Twitter/X card — normally inferred from the Open Graph tags above, but
+      declared explicitly so the card is a decision rather than a guess.
+      `twitter:image` carries the same deployment TODO as `og:image`.
+    -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Vishesh Khanna | Full-Stack Software Engineer" />
+    <meta
+      name="twitter:description"
+      content="Vishesh Khanna — full-stack software engineer building web applications with React, Node.js, Express and MongoDB."
+    />
+    <meta name="twitter:image" content="/og-image.png" />
 
     <!--
       Theme boot script.
 
       Runs synchronously in <head>, before any CSS paints, so the correct
       palette is already on <html> when the first frame renders. Without it a
-      dark-mode visitor sees a cream flash on every load.
+      dark-mode visitor sees a flash of the light sky page on every load.
 
       Kept inline and dependency-free on purpose: an external file would be a
       network request that cannot be guaranteed to land before first paint.

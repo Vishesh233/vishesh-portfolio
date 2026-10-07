@@ -74,10 +74,10 @@ export function Projects() {
   return (
     <Section id="projects" labelledBy="projects-heading">
       <Container width="wide">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col items-center gap-4 text-center">
           <Reveal
             as="p"
-            className="font-mono text-micro tracking-widest text-subtle uppercase"
+            className="font-mono text-micro tracking-widest text-accent-ink uppercase"
           >
             Work
           </Reveal>
@@ -85,12 +85,12 @@ export function Projects() {
           <Reveal
             as="h2"
             id="projects-heading"
-            className="text-display-sm text-foreground-strong"
+            className="text-center text-display-sm text-foreground-strong"
           >
             Featured Projects
           </Reveal>
 
-          <Reveal as="p" className="max-w-[54ch] text-body text-muted">
+          <Reveal as="p" className="mx-auto max-w-[54ch] text-body text-muted">
             Three projects, each with a walkthrough of what it does and what it
             is built from.
           </Reveal>

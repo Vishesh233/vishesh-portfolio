@@ -36,18 +36,18 @@ export const sections = [
   { id: 'hero', label: 'Home' },
   { id: 'about', label: 'About' },
   { id: 'skills', label: 'Skills' },
-  { id: 'projects', label: 'Projects' },
   { id: 'education', label: 'Education' },
+  { id: 'projects', label: 'Projects' },
   { id: 'contact', label: 'Contact' },
 ]
 
 /**
- * Primary navigation — an explicit subset of `sections`, in reading order.
- * Declared separately so the header shows a short list while the page keeps its
- * full structure. The ids are identical to the registry, so a link can never
- * point at a section that is not planned.
+ * Primary navigation — the full `sections` registry, in reading order.
+ * Home (the hero) is included so the header always offers a way back to the
+ * top of the page. The ids are identical to the registry, so a link can never
+ * point at a section that is not mounted.
  */
-export const nav = sections.filter((section) => section.id !== 'hero')
+export const nav = sections
 
 /**
  * About copy. Every clause restates a supplied fact; nothing is inferred about
@@ -317,7 +317,7 @@ export const aboutCards = [
   {
     id: 'beyond-code',
     label: 'Beyond code',
-    dot: 'sun',
+    dot: 'ink',
     body:
       'Core member of Praharsh, the college social welfare club, and a volunteer with Unnat Bharat Abhiyan.',
   },

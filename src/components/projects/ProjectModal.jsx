@@ -276,9 +276,9 @@ export function ProjectModalPanel({
               target="_blank"
               rel="noopener noreferrer"
               className={[
-                'inline-flex items-center gap-2 rounded-sm border border-border-strong',
+                'pop-strong inline-flex items-center gap-2 rounded-sm border border-border-strong',
                 'px-5 py-3 font-mono text-caption text-foreground',
-                'transition-colors duration-200 hover:border-accent hover:text-accent-ink',
+                'transition-colors duration-200 hover:text-accent-ink',
               ].join(' ')}
             >
               <GithubIcon className="size-4" />
@@ -298,7 +298,7 @@ export function ProjectModalPanel({
                   target="_blank"
                   rel="noopener noreferrer"
                   className={[
-                    'inline-flex items-center gap-2 rounded-sm px-5 py-3',
+                    'pop-strong inline-flex items-center gap-2 rounded-sm px-5 py-3',
                     'bg-accent font-mono text-caption text-accent-on',
                     'transition-colors duration-200 hover:bg-accent-hover',
                   ].join(' ')}

@@ -19,10 +19,11 @@ import { Contact } from './components/sections/Contact.jsx'
  * Everything else belongs to a section component.
  *
  * BACKDROP
- * Deliberately flat. The warm gradient and colour blobs belong to the hero
- * alone, per the brief — carrying them across the whole page is what makes a
- * portfolio look like a gradient template. Everything below the hero composites
- * over the plain `--color-background`.
+ * Deliberately restrained. The glow blobs belong to the hero alone, per the
+ * brief — repeating them across the whole page is what makes a portfolio look
+ * like a gradient template. Everything below the hero composites over the
+ * plain `--color-background` (plus, in the dark theme, the faint canvas
+ * gradient declared in base.css).
  *
  * SECTION ORDER
  * Hero, About, Skills, Education, Projects, Contact — matching the `sections`

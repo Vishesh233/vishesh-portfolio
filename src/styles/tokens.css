@@ -4,10 +4,9 @@
    The single source of truth for the visual language. Components never hardcode
    a colour, radius, shadow or duration — they reference these tokens.
 
-   ART DIRECTION — "Warm & Vibrant"
-   A warm cream canvas, near-black warm ink, and three accents that stay in the
-   same warm/cool family: coral-orange as the primary, a cool teal as the
-   secondary counterweight, and a sunny yellow for small moments of emphasis.
+   ART DIRECTION — "Navy & Sky"
+   A deep navy canvas with light-sky accents: cyan as the primary, blue as the
+   secondary counterweight, and a text-safe sky/cyan sibling for small type.
    Light is the default; dark is an equal citizen rather than an afterthought.
 
    THEME MODEL
@@ -17,10 +16,12 @@
    single attribute write — no re-render, no class churn, no flash, because the
    tokens follow the attribute automatically.
 
-   Contrast: every foreground/background pair below meets WCAG AA. Accent
-   colours that fail AA as *text* on cream have a darker `-ink` sibling used for
-   exactly that purpose, so the vivid hexes stay vivid while small text stays
-   readable.
+   Contrast: every foreground/background pair below meets WCAG AA — verified
+   by scripts/contrast-check.mjs in both themes, including hover, active and
+   focus states. The vivid cyan is fine as a fill or a border but not as small
+   text on the light sky page (~2.3:1), so links, labels, focus rings and
+   coloured small text use `--color-accent-ink`, a darker cyan sibling that
+   clears AA in both themes (5.6:1 light, 10.8:1 dark).
    ========================================================================= */
 
 @theme {
@@ -29,101 +30,113 @@
      Named for what they are, not where they are used.
      --------------------------------------------------------------------- */
 
-  /* Warm cream → warm ink. The page's structural neutral ramp. */
-  --color-cream-50: #fff8f0;
-  --color-cream-100: #fffdf9;
-  --color-cream-200: #fdf3e7;
-  --color-cream-300: #f7e9d8;
-  --color-cream-400: #efe0ca;
+  /* Navy → sky. The page's structural neutral ramp: deep navy canvases in the
+     dark theme, a light-sky canvas in the light one. Only the steps a semantic
+     token actually references are declared. */
+  --color-navy-50: #050b1a; /* page background, dark     */
+  --color-navy-100: #0a1530; /* canvas gradient end, dark */
+  --color-navy-200: #0b1426; /* surface, dark             */
+  --color-navy-300: #101b32; /* surface-raised, dark      */
+  --color-navy-400: #1b2a47; /* border, dark              */
+  --color-navy-500: #4f6a9b; /* border-strong, dark       */
 
-  --color-ink-50: #f6efe4;
-  --color-ink-200: #d8cfc0;
-  --color-ink-400: #a79f92;
-  --color-ink-500: #8b8478;
-  --color-ink-600: #5b574f;
-  --color-ink-700: #3b3833;
-  --color-ink-800: #2a2723;
-  --color-ink-900: #1b1a17;
-  --color-ink-950: #15130f;
+  --color-sky-50: #f4f9ff; /* page background, light    */
+  --color-sky-100: #ffffff; /* surface, light            */
+  --color-sky-200: #edf5ff; /* surface-raised, light     */
+  --color-sky-300: #d6e6f5; /* border, light             */
+  --color-sky-400: #748cab; /* border-strong, light      */
+  --color-sky-500: #4a5a70; /* muted, light              */
+  --color-sky-600: #33455e; /* muted-strong, light       */
+  --color-sky-700: #5c6e86; /* subtle, light             */
+  --color-sky-800: #9fb3ce; /* muted, dark               */
+  --color-sky-900: #c3d2e8; /* muted-strong, dark        */
+  --color-sky-1000: #8399b8; /* subtle, dark              */
 
-  /* Primary — coral-orange. */
-  --color-coral-300: #ffb59a;
-  --color-coral-400: #ff9466;
-  --color-coral-500: #f26b3a;
-  --color-coral-600: #d9541f;
-  --color-coral-700: #b24316;
-  --color-coral-800: #8d3411;
-  --color-coral-900: #6b260c;
-  --color-coral-950: #3d1506;
+  /* Ink. Near-black sky ink for light, near-white starlight for dark. */
+  --color-ink-50: #f1f7ff; /* foreground, dark          */
+  --color-ink-900: #0f1b2d; /* foreground, light         */
+  --color-ink-950: #04202a; /* ink on cyan fills, light  */
 
-  /* Secondary — cool teal. The counterweight to all that coral. */
-  --color-teal-300: #7fd3db;
-  --color-teal-400: #33b6c2;
-  --color-teal-500: #0e9aa7;
-  --color-teal-600: #0b7f8a;
-  --color-teal-700: #09646d;
-  --color-teal-800: #074b52;
-  --color-teal-900: #053a40;
-  --color-teal-950: #02252a;
+  /* Primary — cyan. The electric note against navy and sky. */
+  --color-cyan-300: #a5f3fc;
+  --color-cyan-400: #67e8f9;
+  --color-cyan-500: #22d3ee;
+  --color-cyan-600: #06b6d4;
+  --color-cyan-700: #0891b2;
+  --color-cyan-800: #0e7490;
+  --color-cyan-900: #0369a1;
 
-  /* Accent — sunny yellow. Emphasis only, never a large fill. */
-  --color-sun-300: #ffd88a;
-  --color-sun-400: #ffc65c;
-  --color-sun-500: #ffb627;
-  --color-sun-600: #d9900d;
-  --color-sun-700: #a86a06;
-  --color-sun-800: #7d4d04;
-  --color-sun-900: #5c3803;
+  /* Secondary — blue. The counterweight: category markers, the portrait
+     ring's far end, and the dark hero's deep canvas glow. */
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
 
   /* ---------------------------------------------------------------------
      SEMANTIC TOKENS
      What components actually reference. Resolved by `light-dark()`, so each
      carries its light value first and its dark value second.
      --------------------------------------------------------------------- */
-  --color-background: light-dark(#fff8f0, #15130f);
-  --color-surface: light-dark(#ffffff, #1f1c17);
-  --color-surface-raised: light-dark(#fffdf9, #262219);
+  --color-background: light-dark(#f4f9ff, #050b1a);
+  --color-surface: light-dark(#ffffff, #0b1426);
+  --color-surface-raised: light-dark(#edf5ff, #101b32);
 
-  --color-foreground: light-dark(#1b1a17, #f6efe4);
-  --color-foreground-strong: light-dark(#1b1a17, #f6efe4);
-  --color-muted: light-dark(#5b574f, #b8ae9f);
-  --color-muted-strong: light-dark(#3b3833, #d8cfc0);
-  --color-subtle: light-dark(#6f685e, #9c9384);
+  --color-foreground: light-dark(#0f1b2d, #f1f7ff);
+  --color-foreground-strong: light-dark(#0f1b2d, #f1f7ff);
+  --color-muted: light-dark(#4a5a70, #9fb3ce);
+  --color-muted-strong: light-dark(#33455e, #c3d2e8);
+  --color-subtle: light-dark(#5c6e86, #8399b8);
 
-  /* Hairlines. Warm in both themes — a neutral grey reads cold on cream.
+  /* Hairlines. Sky greys in light, navy lines in dark.
      `--color-border` is decorative. `--color-border-strong` outlines real
      controls (ghost buttons), so it is dark enough to clear the 3:1
-     non-text threshold on both backgrounds rather than vanishing on cream. */
-  --color-border: light-dark(#e8dfd2, #332e26);
-  --color-border-strong: light-dark(#94826a, #7a6e5c);
+     non-text threshold on both canvases rather than vanishing on either. */
+  --color-border: light-dark(#d6e6f5, #1b2a47);
+  --color-border-strong: light-dark(#7c93b3, #4f6a9b);
 
-  /* Primary accent. Lifted slightly in dark mode so it keeps its glow
-     against a much darker ground without becoming neon.
-     `accent-on` is ink rather than white: white on #f26b3a measures only
-     3.0:1, whereas ink on the same coral gives 5.8:1. Hover lightens for the
-     same reason — darkening the fill would only reduce contrast against ink. */
-  --color-accent: light-dark(#f26b3a, #ff8f5e);
-  --color-accent-hover: light-dark(#ff7a4a, #ffa57c);
-  --color-accent-active: light-dark(#e85f2c, #ffb99a);
-  --color-accent-on: light-dark(#1b1a17, #15130f);
+  /* Primary accent — cyan. Fills LIGHTEN on hover and lighter again on press
+     in both themes, so `accent-on` keeps its contrast while the visitor is
+     interacting instead of the fill darkening into its own label. */
+  --color-accent: light-dark(#06b6d4, #22d3ee);
+  --color-accent-hover: light-dark(#22d3ee, #67e8f9);
+  --color-accent-active: light-dark(#67e8f9, #a5f3fc);
+  /* Near-black ink on the cyan fill: 7.5:1 on the light fill, 10.9:1 dark. */
+  --color-accent-on: light-dark(#04202a, #050b1a);
 
-  /* Text-safe accents. The vivid hexes fail AA as small text on cream
-     (coral measures ~2.9:1), so links, inline emphasis and coloured labels use
-     these darker siblings instead. Verified >=4.5:1 light and >=7:1 dark. */
-  --color-accent-ink: light-dark(#b24316, #ff9466);
-  --color-teal-ink: light-dark(#09646d, #33b6c2);
-  --color-sun-ink: light-dark(#7d4d04, #ffc65c);
+  /* Text-safe accent. The vivid cyan fails AA as small text on the sky page
+     (~2.3:1), so links, labels, focus rings, error text and coloured small
+     type use this darker sibling: 5.6:1 light, 10.8:1 dark. */
+  --color-accent-ink: light-dark(#0369a1, #22d3ee);
 
-  --color-secondary: light-dark(#0e9aa7, #33b6c2);
-  --color-secondary-ink: light-dark(#09646d, #33b6c2);
-  --color-sun: light-dark(#ffb627, #ffc65c);
-  --color-sun-soft: light-dark(#d9900d, #ffd88a);
+  /* Success carries no red/green in this palette — it borrows the cyan family
+     at a strength that clears AA where it appears (form status on a card):
+     5.7:1 light, 13.5:1 dark. */
+  --color-success-ink: light-dark(#0e7490, #67e8f9);
+
+  /* Secondary accent — blue. Category markers and the portrait ring's far
+     end; `-ink` is its text-safe sibling for any coloured blue type. */
+  --color-secondary: light-dark(#2563eb, #3b82f6);
+  --color-secondary-ink: light-dark(#1d4ed8, #60a5fa);
+
+  /* The hairline a hover-pop adopts: cyan, at 3:1 or better on every
+     surface in both themes (see --shadow-pop and utilities.css). */
+  --color-pop-border: light-dark(#0891b2, #22d3ee);
 
   /* Tinted washes — the only sanctioned place a soft gradient or blob may
-     appear, and even then only inside the hero. */
-  --color-wash-coral: light-dark(#ffb59a, #f26b3a);
-  --color-wash-teal: light-dark(#7fd3db, #0e9aa7);
-  --color-wash-sun: light-dark(#ffd88a, #ffb627);
+     appear, and even then only inside the hero. Light gets faint sky and
+     cyan; dark gets the two glow cores (#1d4ed8 lower-left, #0891b2
+     upper-right). */
+  --color-wash-blue: light-dark(#93c5fd, #1d4ed8);
+  --color-wash-cyan: light-dark(#a5f3fc, #0891b2);
+
+  /* Gradient-name stops (Hero h1). Light is deliberately FLAT: a cyan end
+     stop cannot clear AA as display text on the sky page, so light falls
+     back to one text-safe blue. Dark runs sky → cyan; both stops clear AA
+     on the navy canvas and over the hero glow tails. */
+  --gradient-name-from: light-dark(#0369a1, #60a5fa);
+  --gradient-name-to: light-dark(#0369a1, #22d3ee);
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHY
@@ -164,7 +177,7 @@
 }
 /* ---------------------------------------------------------------------
    RADII
-   Restrained, per the brief: cards top out at 12px. Large radii on every
+   Restrained, per the brief: cards top out at 16px. Large radii on every
    element is the single biggest tell of a template, so the scale is
    deliberately shallow and most surfaces sit at sm/md.
    --------------------------------------------------------------------- */
@@ -172,30 +185,35 @@
   --radius-none: 0px;
   --radius-xs: 3px;
   --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 12px;
-  --radius-xl: 12px;
+  --radius-md: 16px;
+  --radius-lg: 16px;
+  --radius-xl: 16px;
   --radius-full: 9999px;
 }
 
 /* ---------------------------------------------------------------------
    ELEVATION
-   Warm-tinted, never neutral black. The light theme gets a whisper-thin
-   shadow; the dark theme gets a deeper one, because a dark surface against a
-   dark page needs more separation than a light one does.
+   Sky-tinted, never neutral black: light-theme shadows carry a hint of the
+   blue canvas; the dark theme gets deeper blacks, because a dark surface
+   against a dark page needs more separation than a light one does.
    --------------------------------------------------------------------- */
 @theme {
-  --shadow-e1: 0 1px 2px 0 light-dark(rgb(94 60 30 / 0.06), rgb(0 0 0 / 0.4));
-  --shadow-e2: 0 4px 16px -4px light-dark(rgb(94 60 30 / 0.09), rgb(0 0 0 / 0.5)),
-    0 1px 2px 0 light-dark(rgb(94 60 30 / 0.05), rgb(0 0 0 / 0.35));
-  --shadow-e3: 0 18px 40px -12px light-dark(rgb(94 60 30 / 0.14), rgb(0 0 0 / 0.6)),
-    0 2px 6px -2px light-dark(rgb(94 60 30 / 0.07), rgb(0 0 0 / 0.4));
-  --shadow-lift: 0 24px 48px -20px light-dark(rgb(94 60 30 / 0.2), rgb(0 0 0 / 0.7)),
-    0 4px 12px -4px light-dark(rgb(94 60 30 / 0.08), rgb(0 0 0 / 0.45));
+  --shadow-e1: 0 1px 2px 0 light-dark(rgb(37 99 235 / 0.06), rgb(0 0 0 / 0.4));
+  --shadow-e2: 0 4px 16px -4px light-dark(rgb(37 99 235 / 0.1), rgb(0 0 0 / 0.5)),
+    0 1px 2px 0 light-dark(rgb(37 99 235 / 0.05), rgb(0 0 0 / 0.35));
+  --shadow-e3: 0 18px 40px -12px light-dark(rgb(37 99 235 / 0.14), rgb(0 0 0 / 0.6)),
+    0 2px 6px -2px light-dark(rgb(37 99 235 / 0.07), rgb(0 0 0 / 0.4));
+  --shadow-lift: 0 24px 48px -20px light-dark(rgb(37 99 235 / 0.2), rgb(0 0 0 / 0.7)),
+    0 4px 12px -4px light-dark(rgb(37 99 235 / 0.08), rgb(0 0 0 / 0.45));
 
-  /* The one place a coloured glow is allowed: focus states and the primary
-     button. Never on a card at rest. */
-  --shadow-glow: 0 0 0 3px light-dark(rgb(242 107 58 / 0.22), rgb(255 143 94 / 0.28));
+  /* The one place a coloured glow is allowed at rest: focus states and the
+     primary button. Never on a card. */
+  --shadow-glow: 0 0 0 3px light-dark(rgb(6 182 212 / 0.25), rgb(34 211 238 / 0.28));
+
+  /* Hover-pop elevation: the cyan hairline plus lift every interactive
+     surface adopts on hover and on :focus-visible (see utilities.css). */
+  --shadow-pop: 0 0 0 1px light-dark(rgb(8 145 178 / 0.5), rgb(34 211 238 / 0.4)),
+    0 18px 38px -16px light-dark(rgb(37 99 235 / 0.25), rgb(0 0 0 / 0.7));
 }
 
 /* ---------------------------------------------------------------------
@@ -210,29 +228,6 @@
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  --animate-fade-up: fade-up 0.7s var(--ease-out-expo) both;
-  --animate-fade-in: fade-in 0.6s var(--ease-standard) both;
-}
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 14px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 /* ============================================================================
    LAYOUT PRIMITIVES

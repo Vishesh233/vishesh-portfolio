@@ -76,7 +76,7 @@ export function SiteHeader() {
 
         {/* Desktop navigation. Hidden below md, where the menu button takes over. */}
         <nav aria-label="Primary" className="hidden md:block">
-          <ul className="flex items-center gap-6 lg:gap-8">
+          <ul className="flex items-center gap-1 lg:gap-2">
             {nav.map((item) => (
               <li key={item.id}>
                 <NavLink item={item} isActive={activeId === item.id} />
@@ -95,7 +95,7 @@ export function SiteHeader() {
             aria-expanded={isMenuOpen}
             aria-controls={menuId}
             aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-            className="grid size-9 place-items-center rounded-sm border border-border text-muted-strong transition-colors duration-200 hover:border-accent hover:text-accent-ink md:hidden"
+            className="pop-strong grid size-9 place-items-center rounded-sm border border-border text-muted-strong transition-colors duration-200 hover:text-accent-ink md:hidden"
           >
             <MenuIcon isOpen={isMenuOpen} />
           </button>
@@ -113,18 +113,25 @@ export function SiteHeader() {
   )
 }
 
-/** One desktop navigation link. */
+/**
+ * One desktop navigation link, as a pill.
+ *
+ * The active item is a filled pill — surface, hairline, shadow and cyan
+ * text — so "you are here" is carried by the pill itself rather than by an
+ * underline (the old `rule-accent-active` utility, retired with this nav).
+ * Every pill runs the shared hover-pop, like every other interactive surface.
+ */
 function NavLink({ item, isActive }) {
   return (
     <a
       href={`#${item.id}`}
       aria-current={isActive ? 'location' : undefined}
       className={[
-        'relative rounded-xs py-1 font-mono text-caption tracking-tight',
+        'pop block rounded-full px-3.5 py-1.5 font-mono text-caption tracking-tight',
         'transition-colors duration-200',
         isActive
-          ? 'text-foreground-strong rule-accent-active'
-          : 'text-muted hover:text-foreground-strong',
+          ? 'border border-border bg-surface text-accent-ink shadow-e1'
+          : 'border border-transparent text-muted hover:text-foreground-strong',
       ].join(' ')}
     >
       {item.label}
@@ -191,11 +198,13 @@ function MobileMenu({ id, isOpen, activeId, onNavigate, toggleRef }) {
                       onClick={onNavigate}
                       aria-current={isActive ? 'location' : undefined}
                       className={[
-                        'flex items-center justify-between py-3.5 font-mono text-caption tracking-tight',
+                        // The same pill treatment as the desktop nav, so the
+                        // active item reads identically in both presentations.
+                        'pop flex items-center justify-between rounded-full border px-3 py-2.5 font-mono text-caption tracking-tight',
                         'transition-colors duration-200',
                         isActive
-                          ? 'text-accent-ink'
-                          : 'text-muted hover:text-foreground-strong',
+                          ? 'border-border bg-surface text-accent-ink shadow-e1'
+                          : 'border-transparent text-muted hover:text-foreground-strong',
                       ].join(' ')}
                     >
                       {item.label}

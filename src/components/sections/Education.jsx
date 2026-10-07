@@ -22,8 +22,8 @@ export function Education() {
   return (
     <Section id="education" labelledBy="education-heading">
       <Container width="wide">
-        <div className="flex flex-col gap-4">
-          <Reveal as="p" className="font-mono text-micro tracking-widest text-subtle uppercase">
+        <div className="flex flex-col items-center gap-4 text-center">
+          <Reveal as="p" className="font-mono text-micro tracking-widest text-accent-ink uppercase">
             Background
           </Reveal>
 
@@ -31,7 +31,7 @@ export function Education() {
             Education
           </Reveal>
 
-          <Reveal as="p" className="max-w-[54ch] text-body text-muted">
+          <Reveal as="p" className="mx-auto max-w-[54ch] text-body text-muted">
             Where the fundamentals came from, the programmes completed alongside
             coursework, and the clubs that put them to use.
           </Reveal>
@@ -110,7 +110,7 @@ function CertificationsAndLeadership() {
         <ul className="flex flex-col gap-4">
           {certifications.map((cert, index) => (
             <Reveal as="li" key={cert.id} delay={index * 0.05}>
-              <article className="card h-full p-5">
+              <article className="card pop h-full p-5">
                 <div className="flex items-center justify-between gap-3">
                   <span className="rounded-sm border border-border bg-background px-2 py-1 font-mono text-micro tracking-widest text-muted uppercase">
                     {cert.kind === 'virtual-experience'
@@ -144,7 +144,7 @@ function CertificationsAndLeadership() {
         <ul className="flex flex-col gap-4">
           {leadership.map((item, index) => (
             <Reveal as="li" key={item.id} delay={index * 0.05}>
-              <article className="card h-full p-5">
+              <article className="card pop h-full p-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h4 className="text-body-strong text-foreground-strong">{item.organisation}</h4>
                   <span className="font-mono text-caption text-accent-ink">{item.role}</span>

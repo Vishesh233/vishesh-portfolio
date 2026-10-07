@@ -54,9 +54,9 @@ export function SocialLinks({ className = '' }) {
             title={label}
             {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             className={[
-              'grid size-9 place-items-center rounded-sm border border-border',
+              'pop-strong grid size-9 place-items-center rounded-sm border border-border',
               'text-muted-strong transition-colors duration-200',
-              'hover:border-accent hover:text-accent-ink',
+              'hover:text-accent-ink',
             ].join(' ')}
           >
             <Icon className="size-4" />

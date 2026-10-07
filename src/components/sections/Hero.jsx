@@ -4,7 +4,7 @@ import { ActionLink } from '../ui/ActionLink.jsx'
 import { Portrait } from '../ui/Portrait.jsx'
 import { SocialLinks } from '../ui/SocialLinks.jsx'
 import { CopyEmail } from '../ui/CopyEmail.jsx'
-import { DownloadIcon, ArrowIcon } from '../ui/Icons.jsx'
+import { DownloadIcon, ArrowIcon, ChevronIcon } from '../ui/Icons.jsx'
 import { site } from '../../data/site.js'
 
 /**
@@ -16,12 +16,14 @@ import { site } from '../../data/site.js'
  * portrait, and everything collapses to one column on small screens with the
  * portrait first so the page opens on a face rather than on a wall of text.
  *
- * THE BLOBS
- * Two heavily-blurred accent discs, absolutely positioned and `aria-hidden`.
- * This is the only place on the page where a gradient appears — repeating it
- * further down is what turns a warm palette into a gradient template. Both sit
- * at low opacity and are hidden entirely under `prefers-reduced-motion`, where
- * a static glow would serve no purpose.
+ * THE GLOW
+ * Two heavily-blurred colour discs, absolutely positioned and `aria-hidden`:
+ * deep blue low-left, cyan high-right — the navy canvas lit from two corners.
+ * In the light theme the same wash tokens resolve to faint sky and cyan, so
+ * the glow whispers instead of shouting. This is the only place on the page
+ * where a gradient appears — repeating it further down is what turns a
+ * portfolio into a gradient template. Both discs are hidden entirely under
+ * `prefers-reduced-motion`, where a static glow would serve no purpose.
  *
  * SCROLL TARGETS
  * "Get in touch" and "View work" are plain anchor links. Native smooth
@@ -43,11 +45,12 @@ export function Hero() {
       aria-label="Introduction"
       className="section relative flex min-h-[calc(100svh-var(--header-height))] items-center overflow-hidden"
     >
-      {/* Warm gradient blobs — hero only. */}
+      {/* Hero-only glow: blue low-left, cyan high-right. The cores sit
+          off-canvas so only their blurred tails cross the edge — a blob must
+          never sit at full strength behind text. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -left-32 -top-24 size-96 rounded-full bg-wash-coral/25 blur-3xl motion-reduce:hidden" />
-        <div className="absolute -right-24 top-1/3 size-80 rounded-full bg-wash-teal/20 blur-3xl motion-reduce:hidden" />
-        <div className="absolute bottom-0 left-1/2 size-72 -translate-x-1/2 rounded-full bg-wash-sun/15 blur-3xl motion-reduce:hidden" />
+        <div className="absolute -bottom-32 -left-32 size-96 rounded-full bg-wash-blue/40 blur-3xl motion-reduce:hidden" />
+        <div className="absolute -right-28 -top-28 size-80 rounded-full bg-wash-cyan/35 blur-3xl motion-reduce:hidden" />
       </div>
 
       <Container width="wide" className="relative">
@@ -65,13 +68,16 @@ export function Hero() {
             {/*
               One h1 for the whole page. The greeting is set in Geist and the
               surname in Instrument Serif, so the serif reads as an accent word
-              inside a sans heading rather than as a second heading style.
+              inside a sans heading rather than as a second heading style. The
+              name carries the theme's gradient: flat text-safe blue in light,
+              sky → cyan in dark — the stops are owned by the theme tokens,
+              never by this component.
             */}
-            <Reveal as="h1" className="text-display-md leading-[1.02] text-foreground-strong">
+            <Reveal as="h1" className="text-display-md leading-[1.02]">
               <span className="block font-sans text-[0.62em] tracking-tight text-muted">
                 Hi, I&rsquo;m
               </span>
-              <span className="mt-1 block">
+              <span className="text-gradient-name mt-1 block">
                 {firstName}{' '}
                 <span className="font-display italic tracking-tighter">
                   {lastName}
@@ -134,6 +140,20 @@ export function Hero() {
           </div>
         </div>
       </Container>
+
+      {/* Scroll-down affordance: a real anchor to the next section, so it
+          works without JavaScript and honours the same scroll-padding as any
+          other in-page link. Sits in the section's bottom padding, below the
+          content; the loop goes static under reduced motion. Centred with flex
+          rather than a translate utility so the keyframe's transform is the
+          only transform on the element. */}
+      <a
+        href="#about"
+        aria-label="Scroll to About"
+        className="scroll-hint absolute inset-x-0 bottom-5 flex justify-center text-muted transition-colors duration-200 hover:text-accent-ink"
+      >
+        <ChevronIcon className="size-5" />
+      </a>
     </section>
   )
 }

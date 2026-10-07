@@ -52,9 +52,9 @@ export function ThemeToggle({ className = '' }) {
       aria-label={label}
       title={label}
       className={[
-        'grid size-9 shrink-0 place-items-center rounded-sm border border-border',
+        'pop-strong grid size-9 shrink-0 place-items-center rounded-sm border border-border',
         'text-muted-strong transition-colors duration-200',
-        'hover:border-accent hover:text-accent-ink',
+        'hover:text-accent-ink',
         className,
       ]
         .filter(Boolean)

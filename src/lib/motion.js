@@ -10,8 +10,8 @@
  *   orients the eye (entrance), confirms an action (press) or preserves
  *   continuity (layout). Nothing loops, bounces or floats idly.
  * · Durations are unhurried. 600–800ms for entrances, ~200ms for feedback.
- * · Everything routes through `useMotion()` so `prefers-reduced-motion` is a
- *   single decision point rather than a check scattered across components.
+ * · `prefers-reduced-motion` is a single decision point (see Reveal), not a
+ *   check scattered across components.
  */
 
 /** Mirrors `--ease-*` in tokens.css. */
@@ -37,54 +37,27 @@ export const enterTransition = {
   ease: easing.outExpo,
 }
 
-/** Default transition for hover/press feedback — noticeably quicker. */
-export const feedbackTransition = {
-  duration: duration.fast,
-  ease: easing.outQuart,
-}
-
 /**
  * Section entrance.
  *
- * Starts from a VISIBLE state on purpose: opacity 0.72 and a 12px offset, not 0.
+ * Starts from a VISIBLE state on purpose: opacity 0.94 and a 12px offset, not 0.
  * The page is therefore complete and legible at every instant — before the
  * observer fires, if motion never runs at all, and while the element is still
  * scrolling into view. A reveal that begins from nothing risks leaving a blank
  * block on the page if anything interrupts it, and a 12px settle reads as
  * "content arriving" rather than as an animation being performed.
+ *
+ * 0.94 is a hard floor, not a taste choice: the pre-reveal state is a real
+ * rendering state — crawlers, slow-JS visitors and accessibility audits all
+ * see it — so the blended colour has to clear WCAG AA (4.5:1) in both themes.
+ * The previous 0.72 measured 3.5:1 on a card and failed the contrast audit;
+ * 0.94 clears it (≈5:1) while the 12px rise still carries the gesture.
  */
 export const sectionVariants = {
-  hidden: { opacity: 0.72, y: 12 },
+  hidden: { opacity: 0.94, y: 12 },
   visible: {
     opacity: 1,
     y: 0,
     transition: enterTransition,
   },
-}
-
-/** Fades without translating. For text that should not appear to move. */
-export const fadeVariants = {
-  hidden: { opacity: 0.72 },
-  visible: { opacity: 1, transition: enterTransition },
-}
-
-/**
- * Parent for staggered children. `staggerChildren` is small (0.08s) so a list
- * resolves as one gesture rather than a cascade of separate animations.
- */
-export const staggerContainer = (staggerChildren = 0.08, delayChildren = 0) => ({
-  hidden: {},
-  visible: {
-    transition: { staggerChildren, delayChildren },
-  },
-})
-
-/**
- * The reduced-motion variants. Both resolve to `visible` with no transform
- * and no opacity change, so content is present immediately and nothing is
- * hidden behind an animation that will not run.
- */
-export const reducedVariants = {
-  hidden: { opacity: 1, y: 0 },
-  visible: { opacity: 1, y: 0 },
 }

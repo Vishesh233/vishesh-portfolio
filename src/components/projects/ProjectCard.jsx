@@ -43,7 +43,7 @@ export const ProjectCard = forwardRef(function ProjectCard(
     <motion.li
       // The list item is the grid cell; the button inside is the control.
       className="h-full"
-      initial={prefersReducedMotion ? false : { opacity: 0.72, y: 12 }}
+      initial={prefersReducedMotion ? false : { opacity: 0.94, y: 12 }}
       whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px 0px -8% 0px' }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -56,12 +56,12 @@ export const ProjectCard = forwardRef(function ProjectCard(
         onHoverEnd={() => setIsActive(false)}
         onFocus={() => setIsActive(true)}
         onBlur={() => setIsActive(false)}
-        whileHover={prefersReducedMotion ? undefined : { y: -4 }}
-        transition={{ duration: 0.2, ease: [0.25, 1, 0.5, 1] }}
+        // Hover/focus elevation is the shared `.pop` treatment (utilities.css),
+        // not a Framer transform: one implementation, with its own
+        // hover-capable and reduced-motion gates, identical everywhere.
         className={[
-          'group flex h-full w-full flex-col overflow-hidden rounded-md border bg-surface text-left',
-          'border-border transition-[border-color,box-shadow] duration-200',
-          'hover:border-accent hover:shadow-e3',
+          'group pop flex h-full w-full flex-col overflow-hidden rounded-md border bg-surface text-left',
+          'border-border',
         ].join(' ')}
       >
         {/*

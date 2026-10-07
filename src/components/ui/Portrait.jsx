@@ -6,8 +6,8 @@ import { profile } from '../../data/site.js'
  *
  * TWO JOBS
  * 1. Render the photograph when one exists.
- * 2. Fall back to a warm monogram plate when it does not, so the layout is
- *    never left with an empty hole. Both call sites get this for free — no
+ * 2. Fall back to a sky-toned monogram plate when it does not, so the layout
+ *    is never left with an empty hole. Both call sites get this for free — no
  *    caller branches on whether a photo was supplied.
  *
  * WHY THE IMAGE IS LAZY-LOADED BUT STILL EAGER IN THE HERO
@@ -21,11 +21,12 @@ import { profile } from '../../data/site.js'
  * A gradient ring drawn as a padded wrapper rather than a border, because
  * `border-image` with a gradient needs a fallback for every engine and this
  * needs none — it is just a gradient background showing through a 3px gap. The
- * ring cycles coral -> teal -> sunny -> coral so no corner is a dead flat spot.
+ * ring runs cyan -> blue -> cyan so no corner is a dead flat spot.
  *
  * The glow is a sibling behind the frame rather than a shadow on it, because a
  * blurred coloured div can be tuned independently of the ring and does not
- * inherit the card's box-shadow.
+ * inherit the card's box-shadow. The wash token resolves to faint cyan in the
+ * light theme and a deeper cyan in the dark one.
  */
 export function Portrait({
   shape = 'circle',
@@ -67,15 +68,15 @@ export function Portrait({
 
   return (
     <div className={['relative', size, className].filter(Boolean).join(' ')}>
-      {/* Soft warm glow. Decorative, so it never reaches assistive tech. */}
+      {/* Soft cyan glow. Decorative, so it never reaches assistive tech. */}
       <div
         aria-hidden="true"
-        className={`absolute -inset-5 ${radius} bg-accent/20 blur-2xl motion-reduce:hidden`}
+        className={`absolute -inset-5 ${radius} bg-wash-cyan/35 blur-2xl motion-reduce:hidden`}
       />
 
       {/* Gradient ring: a gradient plate with the photo inset over it. */}
       <div
-        className={`relative p-[3px] ${radius} bg-[linear-gradient(140deg,var(--color-accent),var(--color-secondary)_45%,var(--color-sun)_75%,var(--color-accent))]`}
+        className={`relative p-[3px] ${radius} bg-[linear-gradient(140deg,var(--color-accent),var(--color-secondary)_50%,var(--color-accent))]`}
       >
         <div className={`overflow-hidden ${radius} bg-surface`}>
           <img
@@ -108,11 +109,11 @@ function Monogram({ shape, size, className }) {
     <div className={['relative', size, className].filter(Boolean).join(' ')}>
       <div
         aria-hidden="true"
-        className={`absolute -inset-5 ${radius} bg-accent/20 blur-2xl motion-reduce:hidden`}
+        className={`absolute -inset-5 ${radius} bg-wash-cyan/35 blur-2xl motion-reduce:hidden`}
       />
 
       <div
-        className={`relative grid size-full place-items-center ${radius} border border-border-strong bg-[linear-gradient(140deg,var(--color-wash-coral),var(--color-wash-teal))] text-accent-on`}
+        className={`relative grid size-full place-items-center ${radius} border border-border-strong bg-[linear-gradient(140deg,var(--color-wash-blue),var(--color-wash-cyan))] text-accent-on`}
       >
         <span
           className={`font-mono tracking-tight ${

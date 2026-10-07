@@ -130,6 +130,15 @@ export function ArrowIcon({ className }) {
   )
 }
 
+/** Down chevron — the hero's scroll-down hint. */
+export function ChevronIcon({ className }) {
+  return (
+    <Svg className={className}>
+      <path d="M6 9.5 12 15.5l6-6" />
+    </Svg>
+  )
+}
+
 export function DownloadIcon({ className }) {
   return (
     <Svg className={className}>

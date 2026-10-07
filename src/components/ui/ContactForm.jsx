@@ -203,10 +203,12 @@ export function ContactForm() {
       </fieldset>
 
       <div className="flex flex-col gap-3">
+        {/* Same press dip and shared hover-pop as the page's CTA links, so
+            every action on the page behaves alike under hand and keyboard. */}
         <button
           type="submit"
           disabled={status === 'sending'}
-          className="inline-flex w-fit items-center gap-2 rounded-sm bg-accent px-5 py-3 font-mono text-caption text-accent-on transition-colors duration-200 hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60"
+          className="pop-strong inline-flex w-fit items-center gap-2 rounded-sm bg-accent px-5 py-3 font-mono text-caption text-accent-on transition duration-200 hover:bg-accent-hover motion-safe:active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {status === 'sending' ? 'Sending…' : 'Send Message'}
           <ArrowIcon className="size-4" />
@@ -218,7 +220,7 @@ export function ContactForm() {
           aria-live="polite"
           className={[
             'min-h-5 font-mono text-caption',
-            status === 'success' ? 'text-teal-ink' : '',
+            status === 'success' ? 'text-success-ink' : '',
             status === 'error' ? 'text-accent-ink' : 'text-muted',
           ].join(' ')}
         >

@@ -1,0 +1,26 @@
+<!-- OG CARD SOURCE
+     Renders public/og-image.png (1200x630): open this file in a browser
+     (or headless Chrome --window-size=1200,630) and screenshot it. The colours
+     are the light-theme tokens from src/styles/tokens.css, kept in sync by
+     hand because this file is outside the build. -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1200px; height: 630px; overflow: hidden; }
+body { background: #fff8f0; font-family: Georgia, serif; position: relative; }
+.frame { position: absolute; inset: 36px; border: 1px solid #e8dfd2; }
+.content { position: absolute; left: 96px; top: 88px; right: 96px; bottom: 80px; display: flex; flex-direction: column; justify-content: space-between; }
+.kicker { font-family: Consolas, monospace; font-size: 22px; letter-spacing: 0.34em; text-transform: uppercase; color: #6f685e; }
+h1 { font-size: 104px; font-weight: 400; color: #1b1a17; }
+.rule { width: 132px; height: 7px; background: #f26b3a; margin-top: 34px; }
+.role { font-family: Consolas, monospace; font-size: 30px; letter-spacing: 0.30em; text-transform: uppercase; color: #6f685e; margin-top: 34px; }
+.stack { font-family: Consolas, monospace; font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; color: #6f685e; display: flex; justify-content: space-between; }
+.dot { color: #f26b3a; }
+</style></head><body>
+<div class="frame"></div>
+<div class="content">
+<div class="kicker">Portfolio</div>
+<div><h1>Vishesh Khanna</h1><div class="rule"></div><div class="role">Full-Stack Software Engineer</div></div>
+<div class="stack"><span>React <span class="dot">&#183;</span> Node.js <span class="dot">&#183;</span> Express <span class="dot">&#183;</span> MongoDB</span></div>
+</div>
+</body></html>

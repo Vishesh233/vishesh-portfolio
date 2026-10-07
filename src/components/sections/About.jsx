@@ -43,15 +43,15 @@ export function About() {
 
           {/* -------------------------------------------------------- NARRATIVE */}
           <div className="flex flex-col gap-10 lg:col-span-7">
-            <Reveal as="p" className="font-mono text-micro tracking-widest text-subtle uppercase">
+            <Reveal as="p" className="text-center font-mono text-micro tracking-widest text-accent-ink uppercase">
               About
             </Reveal>
 
-            <Reveal as="h2" id="about-heading" className="text-display-sm text-foreground-strong">
+            <Reveal as="h2" id="about-heading" className="text-center text-display-sm text-foreground-strong">
               About me
             </Reveal>
 
-            <Reveal as="p" className="max-w-[54ch] text-lead text-muted">
+            <Reveal as="p" className="mx-auto max-w-[54ch] text-center text-lead text-muted">
               {about.lead}
             </Reveal>
 
@@ -62,7 +62,7 @@ export function About() {
                 <Reveal
                   as="li"
                   key={card.id}
-                  className="card card-interactive flex flex-col gap-3 p-5"
+                  className="card pop flex flex-col gap-3 p-5"
                 >
                   <span className="flex items-center gap-2">
                     <span
@@ -71,7 +71,7 @@ export function About() {
                         {
                           accent: 'bg-accent',
                           secondary: 'bg-secondary',
-                          sun: 'bg-sun',
+                          ink: 'bg-accent-ink',
                         }[card.dot]
                       }`}
                     />
@@ -119,7 +119,7 @@ export function About() {
                 {skillGroups.map((group) => (
                   <li
                     key={group.id}
-                    className="rounded-sm border border-border bg-surface px-3 py-1.5 font-mono text-caption text-muted-strong"
+                    className="pop-strong rounded-sm border border-border bg-surface px-3 py-1.5 font-mono text-caption text-muted-strong"
                   >
                     {group.label}
                     <span aria-hidden="true" className="ml-2 text-subtle">
