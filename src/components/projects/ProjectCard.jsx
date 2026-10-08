@@ -27,7 +27,7 @@ import { ProjectImage } from '../ui/ProjectImage.jsx'
  * largest candidate for every device.
  */
 export const ProjectCard = forwardRef(function ProjectCard(
-  { project, onOpen },
+  { project, index = 0, onOpen },
   ref,
 ) {
   const prefersReducedMotion = useReducedMotion()
@@ -60,7 +60,7 @@ export const ProjectCard = forwardRef(function ProjectCard(
         // not a Framer transform: one implementation, with its own
         // hover-capable and reduced-motion gates, identical everywhere.
         className={[
-          'group pop flex h-full w-full flex-col overflow-hidden rounded-md border bg-surface text-left',
+          'group pop card-spine flex h-full w-full flex-col overflow-hidden rounded-md border bg-surface text-left',
           'border-border',
         ].join(' ')}
       >
@@ -69,8 +69,10 @@ export const ProjectCard = forwardRef(function ProjectCard(
           so all three cards align to the same height even though the source
           screenshots have three different aspect ratios, and the top of each
           UI (the part that identifies the app) is always what is visible.
+          A teal wash keeps photography inside the palette.
         */}
         <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-border bg-background">
+          <div aria-hidden="true" className="absolute inset-0 z-10 bg-accent/10 mix-blend-multiply dark:bg-accent/20 dark:mix-blend-overlay" />
           <ProjectImage
             name={project.image}
             alt={project.imageAlt}
@@ -80,7 +82,16 @@ export const ProjectCard = forwardRef(function ProjectCard(
           />
         </div>
 
-        <div className="flex flex-1 flex-col gap-3 p-6">
+        <div className="flex flex-1 flex-col gap-3 p-6 pl-7">
+          {/* Case-study numeral + category: the entry's identity row. */}
+          <span className="flex items-center gap-2 font-mono text-micro tracking-widest text-gilt uppercase">
+            <span aria-hidden="true">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            <span aria-hidden="true" className="h-px w-5 bg-secondary/70" />
+            {project.category}
+          </span>
+
           <div className="flex items-start justify-between gap-3">
             <h3 id={headingId} className="text-title text-foreground-strong">
               {project.name}
@@ -100,15 +111,6 @@ export const ProjectCard = forwardRef(function ProjectCard(
             </span>
           </div>
 
-          {/* Small coloured category label. */}
-          <span className="flex items-center gap-2 font-mono text-micro tracking-tight text-subtle uppercase">
-            <span
-              aria-hidden="true"
-              className="size-1.5 rounded-full bg-secondary"
-            />
-            {project.category}
-          </span>
-
           {/* Two lines, clamped so the three cards stay the same height
               regardless of description length. */}
           <p className="line-clamp-2 text-body-sm text-muted">
@@ -118,15 +120,16 @@ export const ProjectCard = forwardRef(function ProjectCard(
           {/*
             Every tag in the stack is listed. InterviewPilot's approved stack is
             seven items and truncating it would hide the Gemini API entry, which
-            is the single most distinguishing fact about that project. Chips
-            wrap, so the row grows rather than hiding anything.
+            is the single most distinguishing fact about that project. Quiet
+            mono tags with gold separators — no boxes.
           */}
-          <ul className="mt-auto flex flex-wrap gap-1.5 pt-2">
+          <ul className="mt-auto flex flex-wrap gap-x-3 gap-y-1 pt-2">
             {project.stack.map((item) => (
               <li
                 key={item}
-                className="rounded-sm border border-border bg-background px-2 py-0.5 font-mono text-micro text-muted-strong"
+                className="font-mono text-micro text-muted-strong"
               >
+                <span aria-hidden="true" className="text-gilt mr-1.5">·</span>
                 {item}
               </li>
             ))}

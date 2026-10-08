@@ -97,17 +97,66 @@ export const skillGroups = [
  * Education history as an array from the outset, so the timeline is extensible
  * with data rather than markup. Dates are the supplied range, not inferred, and
  * `note` restates a verified fact rather than an invented achievement.
+ *
+ * RENDER ORDER — NEWEST FIRST
+ * The timeline renders this array in order, so a newer entry is prepended, not
+ * appended. Alternating left/right placement is derived from the index in the
+ * component, so order here is also presentation order.
+ *
+ * SHAPE (one entry is a college entry, a school entry is shown commented):
+ *   level       'college' draws the graduation cap node, 'school' the school
+ *               building node.
+ *   name        The institution.
+ *   degree      College entries: the programme. null on school entries.
+ *   class       School entries: the class completed. null on college entries.
+ *   board       School entries: the board. Optional — null renders nothing.
+ *   start/end   Plain strings, so a month range ("September 2022") and a bare
+ *               year ("2020") both fit without a date parser. `start` is
+ *               optional: an entry carrying only `end` renders that single
+ *               year in the footer rather than a broken range.
+ *   percentage  Optional badge (school entries in practice). null = no badge.
+ *   coursework  Optional chips. null/[] renders no chip row.
+ *   note        Optional mono footnote. null renders nothing.
+ *
+ * Adding a school entry is a data edit only:
+ *   {
+ *     id: 'school-x',
+ *     level: 'school',
+ *     name: 'Some School',
+ *     degree: null,
+ *     class: 'Class XII',
+ *     board: 'CBSE',
+ *     start: '2020',
+ *     end: '2022',
+ *     percentage: '85%',
+ *     coursework: null,
+ *     note: null,
+ *   },
  */
 export const education = [
   {
     id: 'coer-btech',
-    institution: 'College of Engineering Roorkee',
+    level: 'college',
+    name: 'College of Engineering Roorkee',
     shortName: 'COER',
     degree: 'B.Tech in Computer Science and Engineering',
-    startMonth: 'September 2022',
-    endMonth: 'July 2026',
+    class: null,
+    board: null,
+    start: 'September 2022',
+    end: 'July 2026',
+    percentage: null,
     coursework: ['Data Structures and Algorithms', 'Operating Systems', 'DBMS'],
     note: '80+ DSA problems solved on LeetCode and NeetCode',
+  },
+  // Older than COER, so it follows it under newest-first order. Only the
+  // supplied facts are present: no board, no percentage, no start year, no
+  // location — the footer shows the end year alone.
+  {
+    id: 'jingle-bells-class-xii',
+    level: 'school',
+    name: 'Jingle Bells Public School',
+    class: 'Class XII (Intermediate)',
+    end: '2020',
   },
 ]
 
@@ -143,27 +192,6 @@ export const certifications = [
     platform: 'Forage',
     year: '2025',
     kind: 'virtual-experience',
-  },
-]
-
-/**
- * Leadership and volunteering. `activities` lists only the named activities
- * from the content review; `detail` stays null rather than inventing one.
- */
-export const leadership = [
-  {
-    id: 'praharsh',
-    role: 'Core Member',
-    organisation: 'Praharsh',
-    detail: 'College social welfare club',
-    activities: ['Blood donation drives', 'Clothing drives'],
-  },
-  {
-    id: 'unnat-bharat',
-    role: 'Volunteer',
-    organisation: 'Unnat Bharat Abhiyan',
-    detail: null,
-    activities: ['Village outreach with plants and school supplies'],
   },
 ]
 
@@ -295,7 +323,7 @@ export const profile = {
  *
  * Each is a small, labelled statement about how the work is approached. Every
  * clause restates a supplied fact — the frameworks actually used, the DSA
- * count, the named programmes, the named organisations. `dot` selects which
+ * count, the named programmes, the named tools. `dot` selects which
  * accent marks the card; the three are distinct so the cards read as a set
  * rather than as three identical blocks.
  */
@@ -315,11 +343,10 @@ export const aboutCards = [
       '80+ DSA problems solved on LeetCode and NeetCode, alongside learning programmes from IBM, JPMorgan Chase and Deloitte. The latter two are Forage virtual experience programmes rather than roles.',
   },
   {
-    id: 'beyond-code',
-    label: 'Beyond code',
+    id: 'tools-i-work-with',
+    label: 'Tools I work with',
     dot: 'ink',
-    body:
-      'Core member of Praharsh, the college social welfare club, and a volunteer with Unnat Bharat Abhiyan.',
+    body: 'Git, GitHub, Postman, npm, VS Code and IntelliJ IDEA — the version control, API testing and editing toolkit behind the projects above.',
   },
 ]
 

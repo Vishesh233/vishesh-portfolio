@@ -111,6 +111,11 @@ export function AwardIcon({ className }) {
   )
 }
 
+/**
+ * School building — the school-level education node on the timeline (the
+ * college node is CapIcon). Also general architecture; it carries no meaning
+ * on its own, per the header note.
+ */
 export function BuildingIcon({ className }) {
   return (
     <Svg className={className}>
@@ -118,6 +123,16 @@ export function BuildingIcon({ className }) {
       <path d="M6.5 20.5V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v15.5" />
       <path d="M9.5 7.5h1.5M13 7.5h1.5M9.5 11h1.5M13 11h1.5M9.5 14.5h1.5M13 14.5h1.5" />
       <path d="M10.5 20.5v-3h3v3" />
+    </Svg>
+  )
+}
+
+/** Calendar — the date range in an education card's footer. */
+export function CalendarIcon({ className }) {
+  return (
+    <Svg className={className}>
+      <rect x="3.5" y="5" width="17" height="15.5" rx="2" />
+      <path d="M3.5 9.5h17M8 3v4M16 3v4" />
     </Svg>
   )
 }

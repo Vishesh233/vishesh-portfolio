@@ -8,8 +8,10 @@ import { cn } from '../../lib/utils.js'
  * tracked out, modest radius — so a row of CTAs reads as a set rather than as
  * competing buttons.
  *
- * · `primary` — a cyan fill. Reserved for the single most important action in
- *   a view, so the accent never stops meaning "this is the one".
+ * · `primary` — an accent fill (blue in light, teal in dark) with the
+ *   theme's accent-on ink. Reserved for the single most important action
+ *   in a view, so the accent never stops meaning "this is the one". Gold
+ *   never fills — it stays a detail.
  * · `ghost` — a hairline. Everything else, so it stays quiet.
  * · `quiet` — text plus an arrow, no box at all. For tertiary actions inside
  *   dense rows such as a modal footer.
@@ -17,9 +19,9 @@ import { cn } from '../../lib/utils.js'
  * PRESS FEEDBACK: every variant dips to 98% while `:active`, gated behind
  * `motion-safe:` so reduced-motion readers keep a static press. A click
  * should feel acknowledged before the destination resolves. Boxed variants
- * also carry the shared hover-pop (`pop-strong` in utilities.css): lift, cyan
- * hairline and shadow, gated on hover-capable pointers and neutralised under
- * `prefers-reduced-motion`. The quiet variant
+ * also carry the shared hover-pop (`pop-strong` in utilities.css): lift,
+ * accent hairline and shadow, gated on hover-capable pointers and
+ * neutralised under `prefers-reduced-motion`. The quiet variant
  * stays colour-only, because a text link moving fights the reading path.
  *
  * RENDERS AN ANCHOR because every destination here is a real URL: an on-page

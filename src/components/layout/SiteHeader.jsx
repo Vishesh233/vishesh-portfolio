@@ -51,7 +51,9 @@ export function SiteHeader() {
         width="wide"
         className="flex h-[var(--header-height)] items-center justify-between gap-4"
       >
-        {/* Brand. Returns to the top of the page from anywhere. */}
+        {/* Brand. Returns to the top of the page from anywhere. The monogram
+            is an accent-filled identity plate with a hairline gold inset —
+            part of the identity system, not a decorative capsule. */}
         <a
           href="#hero"
           onClick={closeMenu}
@@ -59,7 +61,7 @@ export function SiteHeader() {
         >
           <span
             aria-hidden="true"
-            className="grid size-7 shrink-0 place-items-center rounded-xs bg-accent font-mono text-[0.6875rem] font-medium leading-none text-accent-on"
+            className="grid size-7 shrink-0 place-items-center rounded-xs bg-accent font-display text-[0.8125rem] italic leading-none text-accent-on shadow-gold-ring"
           >
             VK
           </span>
@@ -114,12 +116,12 @@ export function SiteHeader() {
 }
 
 /**
- * One desktop navigation link, as a pill.
+ * One desktop navigation link — minimal and architectural.
  *
- * The active item is a filled pill — surface, hairline, shadow and cyan
- * text — so "you are here" is carried by the pill itself rather than by an
- * underline (the old `rule-accent-active` utility, retired with this nav).
- * Every pill runs the shared hover-pop, like every other interactive surface.
+ * The active item carries an accent underline bar and accent text (blue in
+ * Moonstone, teal in Twilight), so "you are here" reads as structure rather
+ * than a filled pill. Every link keeps the colour-only transition (no lift),
+ * because nav moving under the pointer fights the reading path.
  */
 function NavLink({ item, isActive }) {
   return (
@@ -127,11 +129,11 @@ function NavLink({ item, isActive }) {
       href={`#${item.id}`}
       aria-current={isActive ? 'location' : undefined}
       className={[
-        'pop block rounded-full px-3.5 py-1.5 font-mono text-caption tracking-tight',
+        'relative block px-3 py-1.5 font-mono text-caption tracking-tight',
         'transition-colors duration-200',
         isActive
-          ? 'border border-border bg-surface text-accent-ink shadow-e1'
-          : 'border border-transparent text-muted hover:text-foreground-strong',
+          ? 'text-accent-ink after:absolute after:inset-x-3 after:-bottom-0.5 after:h-px after:bg-accent'
+          : 'text-muted hover:text-foreground-strong',
       ].join(' ')}
     >
       {item.label}
@@ -198,17 +200,18 @@ function MobileMenu({ id, isOpen, activeId, onNavigate, toggleRef }) {
                       onClick={onNavigate}
                       aria-current={isActive ? 'location' : undefined}
                       className={[
-                        // The same pill treatment as the desktop nav, so the
-                        // active item reads identically in both presentations.
-                        'pop flex items-center justify-between rounded-full border px-3 py-2.5 font-mono text-caption tracking-tight',
+                        // The same underline treatment as the desktop nav, so
+                        // the active item reads identically in both
+                        // presentations — no pills anywhere.
+                        'relative flex items-center justify-between px-3 py-2.5 font-mono text-caption tracking-tight',
                         'transition-colors duration-200',
                         isActive
-                          ? 'border-border bg-surface text-accent-ink shadow-e1'
-                          : 'border-transparent text-muted hover:text-foreground-strong',
+                          ? 'text-accent-ink before:absolute before:inset-y-2 before:left-0 before:w-px before:bg-accent'
+                          : 'text-muted hover:text-foreground-strong',
                       ].join(' ')}
                     >
                       {item.label}
-                      <span aria-hidden="true" className="text-subtle">
+                      <span aria-hidden="true" className="text-gilt">
                         →
                       </span>
                     </a>

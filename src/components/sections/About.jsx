@@ -11,14 +11,18 @@ import { about, aboutCards, skillGroups, site, stats } from '../../data/site.js'
  *
  * COMPOSITION
  * A large portrait on the left, the narrative on the right. The right column
- * carries, in order: the heading, one short paragraph, the three info cards,
- * the stat tiles, a condensed skill list and the resume link — so a reader
- * skimming the column gets the story, then the evidence, then the tools.
+ * carries, in order: the eyebrow, the heading with its section numeral, one
+ * short paragraph, the three info cards, the stat row, a condensed skill
+ * list and the resume link — so a reader skimming the column gets the story,
+ * then the evidence, then the tools.
  *
- * THE STAT TILES
+ * THE STAT ROW
  * The three numbers come from the `stats` registry, which derives them from
  * `projects` and `certifications` rather than hard-coding them. There is no
  * fourth tile, because there is no fourth verified number to put in it.
+ * Stats read as editorial figures separated by hairlines — not boxed tiles —
+ * with the number warming on hover (see the stat-tile block in
+ * utilities.css).
  *
  * THE SKILL LIST HERE IS CONDENSED
  * About shows the group names with their item counts, not every item — the
@@ -43,12 +47,14 @@ export function About() {
 
           {/* -------------------------------------------------------- NARRATIVE */}
           <div className="flex flex-col gap-10 lg:col-span-7">
-            <Reveal as="p" className="text-center font-mono text-micro tracking-widest text-accent-ink uppercase">
-              About
+            <Reveal as="p" className="flex items-center justify-center gap-3 font-mono text-micro tracking-widest text-accent-ink uppercase">
+              <span aria-hidden="true" className="eyebrow-rule h-px w-6" />
+              <span className="section-index" data-index="01">About</span>
+              <span aria-hidden="true" className="eyebrow-rule h-px w-6" />
             </Reveal>
 
             <Reveal as="h2" id="about-heading" className="text-center text-display-sm text-foreground-strong">
-              About me
+              About <span className="font-display italic">me</span>
             </Reveal>
 
             <Reveal as="p" className="mx-auto max-w-[54ch] text-center text-lead text-muted">
@@ -56,26 +62,30 @@ export function About() {
             </Reveal>
 
             {/* The three cards. Each dot picks a different accent so the set
-                reads as three related but distinct statements. */}
+                reads as three related but distinct statements: teal/blue,
+                lavender, and the tertiary support note. `info-dot` and
+                `info-label` are the hooks utilities.css uses for the hover
+                bloom and the label brighten. The first card carries the
+                accent spine. */}
             <ul className="grid gap-4 sm:grid-cols-3">
-              {aboutCards.map((card) => (
+              {aboutCards.map((card, cardIndex) => (
                 <Reveal
                   as="li"
                   key={card.id}
-                  className="card pop flex flex-col gap-3 p-5"
+                  className={`card pop flex flex-col gap-3 p-5 ${cardIndex === 0 ? 'card-spine pl-6' : ''}`}
                 >
                   <span className="flex items-center gap-2">
                     <span
                       aria-hidden="true"
-                      className={`size-2 rounded-full ${
+                      className={`info-dot size-2 rounded-full ${
                         {
                           accent: 'bg-accent',
                           secondary: 'bg-secondary',
-                          ink: 'bg-accent-ink',
+                          ink: 'bg-tertiary',
                         }[card.dot]
                       }`}
                     />
-                    <span className="font-mono text-caption tracking-tight text-foreground-strong">
+                    <span className="info-label font-mono text-caption tracking-tight text-foreground-strong transition-colors duration-200">
                       {card.label}
                     </span>
                   </span>
@@ -85,20 +95,26 @@ export function About() {
               ))}
             </ul>
 
-            {/* Stat tiles. Real numbers only — see the note above. */}
+            {/* Stat row. Real numbers only — see the note above. An editorial
+                figure row with hairline separators, not boxed tiles; each
+                figure still lifts its number on hover exactly like every
+                other surface. */}
             <Reveal
               as="dl"
-              className="grid grid-cols-3 gap-4 border-y border-border py-6"
+              className="grid grid-cols-3 divide-x divide-border border-y border-border"
             >
               {stats.map((stat) => (
-                <div key={stat.id} className="flex flex-col gap-1">
+                <div
+                  key={stat.id}
+                  className="stat-tile card pop flex flex-col items-center gap-1 px-2 py-6 text-center"
+                >
                   <dt className="sr-only">{stat.label}</dt>
-                  <dd className="font-display text-[2.5rem] leading-none text-accent-ink">
+                  <dd className="stat-value font-display text-[2.5rem] leading-none text-foreground-strong transition-colors duration-200">
                     {stat.value}
                   </dd>
                   <dd
                     aria-hidden="true"
-                    className="font-mono text-micro tracking-tight text-subtle uppercase"
+                    className="font-mono text-micro tracking-tight text-gilt uppercase"
                   >
                     {stat.label}
                   </dd>
@@ -106,7 +122,9 @@ export function About() {
               ))}
             </Reveal>
 
-            {/* Condensed skill list — group names with counts, not every item. */}
+            {/* Condensed skill list — group names with counts, not every item.
+                Editorial separators, not boxed pills: quiet text with gold
+                counts. */}
             <div className="flex flex-col gap-4">
               <Reveal
                 as="p"
@@ -115,15 +133,15 @@ export function About() {
                 Works with
               </Reveal>
 
-              <Reveal as="ul" className="flex flex-wrap gap-2">
+              <Reveal as="ul" className="flex flex-wrap items-baseline gap-x-5 gap-y-2">
                 {skillGroups.map((group) => (
                   <li
                     key={group.id}
-                    className="pop-strong rounded-sm border border-border bg-surface px-3 py-1.5 font-mono text-caption text-muted-strong"
+                    className="font-mono text-caption text-muted-strong transition-colors duration-200 hover:text-accent-ink"
                   >
                     {group.label}
-                    <span aria-hidden="true" className="ml-2 text-subtle">
-                      {group.items.length}
+                    <span aria-hidden="true" className="text-gilt ml-1.5">
+                      {String(group.items.length).padStart(2, '0')}
                     </span>
                     <span className="sr-only"> items</span>
                   </li>

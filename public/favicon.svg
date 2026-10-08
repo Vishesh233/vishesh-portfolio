@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="VK monogram">
-  <rect width="64" height="64" rx="12" fill="#0B1426" />
-  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="11.25" fill="none" stroke="#06B6D4" stroke-opacity="0.45" stroke-width="1.5" />
-  <path d="M15 20h4.6l6.1 14.2L31.4 20H36l-8.6 18.2V44h-4.8v-5.8L15 20Z" fill="#F1F7FF" />
-  <path d="M39.4 20h4.3l3.2 9.1 3.2-9.1h4.3l-5.6 13.4V44h-3.9v-10.6L39.4 20Z" fill="#22D3EE" />
+  <rect width="64" height="64" rx="12" fill="#1F1917" />
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="11.25" fill="none" stroke="#C49A5A" stroke-opacity="0.45" stroke-width="1.5" />
+  <rect x="3" y="3" width="58" height="58" rx="9" fill="#421521" />
+  <path d="M15 20h4.6l6.1 14.2L31.4 20H36l-8.6 18.2V44h-4.8v-5.8L15 20Z" fill="#F1E8DC" />
+  <path d="M39.4 20h4.3l3.2 9.1 3.2-9.1h4.3l-5.6 13.4V44h-3.9v-10.6L39.4 20Z" fill="#C49A5A" />
 </svg>

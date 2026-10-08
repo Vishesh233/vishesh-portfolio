@@ -1,7 +1,9 @@
 # Vishesh Khanna — Portfolio
 
-A single-page personal portfolio: quiet, editorial — a navy/sky dual theme,
-cyan accent, serif display type over a structured mono/sans grid. Content lives in
+A single-page personal portfolio: quiet, editorial — a coordinated dual theme
+(TWILIGHT MIST dark, MOONSTONE light) built on teal, lavender and electric
+blue with restrained gold details, serif display type over a structured
+mono/sans grid. Content lives in
 one file (`src/data/site.js`), motion is deliberately restrained, and the whole
 UI supports light and dark through `light-dark()` design tokens.
 
@@ -24,8 +26,8 @@ the contact form. Without it the form explains itself and falls back to a
 | `npm run build`     | Production build to `dist/`                                         |
 | `npm run preview`   | Serve the production build (used by the Lighthouse audit)           |
 | `npm run lint`      | ESLint over the whole project                                       |
-| `npm test`          | Vitest + Testing Library in jsdom (26 tests)                        |
-| `npm run contrast`  | `scripts/contrast-check.mjs` — 35 text/background pairs, both themes |
+| `npm test`          | Vitest + Testing Library in jsdom (36 tests)                        |
+| `npm run contrast`  | `scripts/contrast-check.mjs` — 111 text/background pairs, both themes |
 | `node scripts/optimize-images.mjs` | Regenerate responsive WebP sets with sharp          |
 
 ## Stack
@@ -60,7 +62,7 @@ src/components/
                          ProjectImage, SkillIcons, SocialLinks, ThemeToggle
 src/styles/              tokens.css (design tokens), base.css, utilities.css,
                          index.css
-src/*.test.jsx/.test.js  26 tests: app shell, ContactForm, contact helpers
+src/*.test.jsx/.test.js  36 tests: app shell, ContactForm, contact helpers
 ```
 
 ## Design and motion notes
@@ -127,5 +129,7 @@ marked `TODO(deploy)` in `index.html`:
 3. `ai-catalog.json` (ARD) for the remaining agentic-discovery audit
 
 To refresh `public/og-image.png`, open `scripts/og-card.html` headless at
-1200×630 and screenshot it — the colours mirror the light-theme tokens.
+1200×630 and screenshot it — the colours mirror the Twilight Mist dark-theme
+tokens in `src/styles/tokens.css`, with the site's own Geist and Instrument
+Serif faces.
 

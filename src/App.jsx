@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { SkipLink } from './components/layout/SkipLink.jsx'
 import { SiteHeader } from './components/layout/SiteHeader.jsx'
 import { SiteFooter } from './components/layout/SiteFooter.jsx'
@@ -7,14 +8,18 @@ import { Skills } from './components/sections/Skills.jsx'
 import { Education } from './components/sections/Education.jsx'
 import { Projects } from './components/sections/Projects.jsx'
 import { Contact } from './components/sections/Contact.jsx'
+import { installCursorGlow } from './lib/cursorGlow.js'
 
 /**
  * Application shell.
  *
- * Owns exactly three things:
+ * Owns exactly four things:
  *   1. document landmarks (skip link, header, main, footer)
  *   2. the page background
  *   3. the section mount points
+ *   4. the cursor light — one delegated listener set for every card/box on
+ *      the page (see src/lib/cursorGlow.js), bound once here rather than
+ *      per component so the effect and the `.pop`/`.card` CSS stay a pair
  *
  * Everything else belongs to a section component.
  *
@@ -34,6 +39,10 @@ import { Contact } from './components/sections/Contact.jsx'
  * It is NOT applied to the hero, which is on screen immediately.
  */
 export default function App() {
+  // StrictMode double-invokes effects in development: the second install
+  // runs after the first cleanup, so exactly one listener set survives.
+  useEffect(() => installCursorGlow(), [])
+
   return (
     <>
       <SkipLink />

@@ -175,12 +175,17 @@ export function ProjectModalPanel({
       {...panelMotion}
       transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
       className={[
-        'relative my-auto w-full max-w-4xl overflow-hidden rounded-md',
+        // `panel` is the dialog's box treatment: it opts the surface into the
+        // shared cursor light and border glow (utilities.css) without the
+        // hover-pop lift — a modal must not move under the pointer while its
+        // contents are being read or scrolled.
+        'panel relative my-auto w-full max-w-4xl overflow-hidden rounded-md',
         'border border-border bg-surface shadow-lift',
       ].join(' ')}
     >
         {/* Screenshot banner, with the close button over it. */}
         <div className="relative aspect-[16/8] w-full overflow-hidden border-b border-border bg-background">
+          <div aria-hidden="true" className="absolute inset-0 z-10 bg-accent/10 mix-blend-multiply dark:bg-accent/20 dark:mix-blend-overlay" />
           <ProjectImage
             name={project.image}
             alt={project.imageAlt}
@@ -205,8 +210,8 @@ export function ProjectModalPanel({
 
         {/* Scrollable body. */}
         <div className="max-h-[60vh] overflow-y-auto p-6 sm:p-8">
-          <span className="flex items-center gap-2 font-mono text-micro tracking-tight text-subtle uppercase">
-            <span aria-hidden="true" className="size-1.5 rounded-full bg-secondary" />
+          <span className="flex items-center gap-2 font-mono text-micro tracking-widest text-gilt uppercase">
+            <span aria-hidden="true" className="h-px w-5 bg-secondary/70" />
             {project.category}
           </span>
 
@@ -220,7 +225,8 @@ export function ProjectModalPanel({
           <p className="mt-2 text-body-sm text-muted">{project.tagline}</p>
 
           <div className="mt-6">
-            <h4 className="font-mono text-micro tracking-widest text-subtle uppercase">
+            <h4 className="flex items-center gap-2 font-mono text-micro tracking-widest text-accent-ink uppercase">
+              <span aria-hidden="true" className="h-px w-4 bg-accent/70" />
               Overview
             </h4>
             <p className="mt-2 max-w-[68ch] text-body text-muted-strong">
@@ -229,7 +235,8 @@ export function ProjectModalPanel({
           </div>
 
           <div className="mt-7">
-            <h4 className="font-mono text-micro tracking-widest text-subtle uppercase">
+            <h4 className="flex items-center gap-2 font-mono text-micro tracking-widest text-accent-ink uppercase">
+              <span aria-hidden="true" className="h-px w-4 bg-accent/70" />
               Key features
             </h4>
             <ul className="mt-3 flex flex-col gap-2">
@@ -240,7 +247,7 @@ export function ProjectModalPanel({
                 >
                   <span
                     aria-hidden="true"
-                    className="mt-2 size-1.5 shrink-0 rounded-full bg-accent"
+                    className="mt-2 size-1.5 shrink-0 rounded-full bg-secondary"
                   />
                   {feature}
                 </li>
@@ -249,15 +256,17 @@ export function ProjectModalPanel({
           </div>
 
           <div className="mt-7">
-            <h4 className="font-mono text-micro tracking-widest text-subtle uppercase">
+            <h4 className="flex items-center gap-2 font-mono text-micro tracking-widest text-accent-ink uppercase">
+              <span aria-hidden="true" className="h-px w-4 bg-accent/70" />
               Tech stack
             </h4>
-            <ul className="mt-3 flex flex-wrap gap-2">
+            <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
               {project.stack.map((item) => (
                 <li
                   key={item}
-                  className="rounded-sm border border-border bg-background px-2.5 py-1 font-mono text-caption text-muted-strong"
+                  className="font-mono text-caption text-muted-strong"
                 >
+                  <span aria-hidden="true" className="text-gilt mr-1.5">·</span>
                   {item}
                 </li>
               ))}
@@ -265,7 +274,7 @@ export function ProjectModalPanel({
           </div>
 
           {project.notes && (
-            <p className="mt-6 border-l-2 border-border-strong pl-4 text-body-sm text-subtle">
+            <p className="mt-6 border-l-2 border-secondary/60 pl-4 text-body-sm text-subtle">
               {project.notes}
             </p>
           )}

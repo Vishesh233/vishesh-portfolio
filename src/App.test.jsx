@@ -116,20 +116,34 @@ describe('page anchors and content', () => {
     expect(window.location.hash).toBe('#contact')
   })
 
-  it('mounts education with one timeline entry and both columns below', () => {
+  it('mounts education as a centre-line timeline with certifications below', () => {
     render(<App />)
 
     expect(document.getElementById('education-heading')).toBeTruthy()
 
-    // ONE timeline entry today; the data file is an array, so growth is data.
-    const timeline = document.querySelector('#education ol')
+    // TWO timeline entries today (college, then the older school entry);
+    // the data file is an array, so growth is data.
+    const timeline = document.querySelector('#education .timeline')
     expect(timeline).toBeTruthy()
-    expect(timeline.children).toHaveLength(1)
+    expect(timeline.children).toHaveLength(2)
+
     expect(screen.getByText('College of Engineering Roorkee')).toBeTruthy()
+    expect(
+      screen.getByText('B.Tech in Computer Science and Engineering'),
+    ).toBeTruthy()
     expect(screen.getByText('September 2022 – July 2026')).toBeTruthy()
 
+    // Round icon node riding the rail: cap for college, building for school.
+    expect(document.querySelector('.timeline-node')).toBeTruthy()
+    expect(document.querySelectorAll('.timeline-item')).toHaveLength(2)
+
+    expect(screen.getByText('Data Structures and Algorithms')).toBeTruthy()
+    expect(
+      screen.getByText('80+ DSA problems solved on LeetCode and NeetCode'),
+    ).toBeTruthy()
+
+    // Certifications keep their heading, now as a single row of cards.
     expect(screen.getByRole('heading', { level: 3, name: 'Certifications' })).toBeTruthy()
-    expect(screen.getByRole('heading', { level: 3, name: 'Leadership' })).toBeTruthy()
 
     expect(screen.getByText('Generative AI Fundamentals')).toBeTruthy()
     expect(screen.getByText('Software Engineering Virtual Experience')).toBeTruthy()
@@ -137,20 +151,76 @@ describe('page anchors and content', () => {
     // Exactly the two Forage entries carry the virtual-experience label.
     expect(screen.getAllByText('Virtual experience program')).toHaveLength(2)
 
-    expect(screen.getByText('Praharsh')).toBeTruthy()
-    expect(screen.getByText('Blood donation drives')).toBeTruthy()
-    expect(screen.getByText('Clothing drives')).toBeTruthy()
-    expect(screen.getByText('Unnat Bharat Abhiyan')).toBeTruthy()
+    // Leadership was removed wholesale: no heading, no column, no content.
     expect(
-      screen.getByText('Village outreach with plants and school supplies'),
+      screen.queryByRole('heading', { level: 3, name: 'Leadership' }),
+    ).toBeNull()
+  })
+
+  it('renders the school entry with the school-building node and no location text', () => {
+    render(<App />)
+
+    // Second entry — older than COER, so it follows it under newest-first
+    // order, which also lands it on the right of the rail (odd index).
+    const items = document.querySelectorAll('.timeline-item')
+    expect(items).toHaveLength(2)
+    const school = items[1]
+
+    expect(screen.getByText('Jingle Bells Public School')).toBeTruthy()
+    expect(screen.getByText('Class XII (Intermediate)')).toBeTruthy()
+
+    // Footer right carries only the year the data file supplies. No start
+    // date was given, so a range must not be assembled around it.
+    expect(screen.getByText('2020')).toBeTruthy()
+
+    // The school node wears the building glyph: its distinctive ground line.
+    // The college node's cap path starts "M12 4.5 2.75 9" instead.
+    const node = school.querySelector('.timeline-node')
+    expect(node).toBeTruthy()
+    expect(node.querySelector('path[d="M4.5 20.5h15"]')).toBeTruthy()
+
+    // The card's ENTIRE text is the decorative index line plus the supplied
+    // facts, so anything not given — a location, a board, a percentage, an
+    // invented start year — would fail this match rather than slip through
+    // quietly.
+    const text = school.querySelector('.timeline-card').textContent
+    expect(text).toMatch(
+      /^02 — 2020Jingle Bells Public School\s*Class XII \(Intermediate\)\s*2020$/,
+    )
+  })
+
+  it('renders the three About cards, with tools in place of leadership', () => {
+    render(<App />)
+
+    expect(screen.getByText('What I build')).toBeTruthy()
+    expect(screen.getByText('How I practice')).toBeTruthy()
+    expect(screen.getByText('Tools I work with')).toBeTruthy()
+    expect(
+      screen.getByText(/Git, GitHub, Postman, npm, VS Code and IntelliJ IDEA/),
     ).toBeTruthy()
+  })
+
+  it('gives the stat tiles the shared hover-pop treatment', () => {
+    render(<App />)
+
+    // Non-actionable, but still boxes: the same `card pop` every other
+    // surface carries, so they lift, shadow and brighten identically.
+    const tiles = document.querySelectorAll('#about .stat-tile')
+    expect(tiles).toHaveLength(3)
+
+    for (const tile of tiles) {
+      expect(tile.classList.contains('card')).toBe(true)
+      expect(tile.classList.contains('pop')).toBe(true)
+    }
+
+    expect(screen.getByText('80+')).toBeTruthy()
   })
 
   it('mounts the contact section with a labelled form and live status', () => {
     render(<App />)
 
     expect(document.getElementById('contact-heading')).toBeTruthy()
-    expect(screen.getByRole('heading', { level: 2, name: 'Get In Touch' })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 2, name: 'Get in touch' })).toBeTruthy()
 
     expect(screen.getByLabelText('Name')).toBeTruthy()
     expect(screen.getByLabelText('Email')).toBeTruthy()
@@ -175,10 +245,18 @@ describe('page anchors and content', () => {
     expect(document.querySelector('a[href^="tel:"]')).toBeNull()
     expect(document.getElementById('experience')).toBeNull()
 
+    // Leadership, and the two organisations it named, were removed wholesale
+    // — section, About card and data alike. Nothing may reintroduce them.
+    expect(document.body.textContent).not.toMatch(/Leadership/)
+    expect(document.body.textContent).not.toMatch(/Praharsh/)
+    expect(document.body.textContent).not.toMatch(/Unnat Bharat Abhiyan/)
+    expect(document.body.textContent).not.toMatch(/Beyond code/)
+
     const headings = [...document.querySelectorAll('h2, h3')].map((heading) =>
       heading.textContent.trim(),
     )
     expect(headings).not.toContain('Experience')
+    expect(headings).not.toContain('Leadership')
   })
 
   it('closes with a footer that has a live year and a way back to the top', () => {

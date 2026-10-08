@@ -6,7 +6,7 @@ import { profile } from '../../data/site.js'
  *
  * TWO JOBS
  * 1. Render the photograph when one exists.
- * 2. Fall back to a sky-toned monogram plate when it does not, so the layout
+ * 2. Fall back to an identity monogram plate when it does not, so the layout
  *    is never left with an empty hole. Both call sites get this for free — no
  *    caller branches on whether a photo was supplied.
  *
@@ -20,13 +20,15 @@ import { profile } from '../../data/site.js'
  * THE RING
  * A gradient ring drawn as a padded wrapper rather than a border, because
  * `border-image` with a gradient needs a fallback for every engine and this
- * needs none — it is just a gradient background showing through a 3px gap. The
- * ring runs cyan -> blue -> cyan so no corner is a dead flat spot.
+ * needs none — it is just a gradient background showing through a 3px gap.
+ * The ring runs the theme's identity trio — blue → teal → lavender in
+ * light, teal → lavender → blue in dark — so no corner is a dead flat
+ * spot, yet nothing reads neon.
  *
- * The glow is a sibling behind the frame rather than a shadow on it, because a
- * blurred coloured div can be tuned independently of the ring and does not
- * inherit the card's box-shadow. The wash token resolves to faint cyan in the
- * light theme and a deeper cyan in the dark one.
+ * The glow is a sibling behind the frame rather than a shadow on it, because
+ * a blurred coloured div can be tuned independently of the ring and does not
+ * inherit the card's box-shadow. The wash token resolves to a pastel blue
+ * in the light theme and a luminous blue in the dark one.
  */
 export function Portrait({
   shape = 'circle',
@@ -46,7 +48,14 @@ export function Portrait({
     profile.image()
       .then((module) => {
         if (!active) return
-        setSource(module.default?.src ?? null)
+        // Vite asset imports resolve to a URL string as the default export
+        // (not `{ src }` — that shape only exists for imported picture
+        // metadata). Accept either so the photo actually renders.
+        const resolved =
+          typeof module.default === 'string'
+            ? module.default
+            : (module.default?.src ?? null)
+        setSource(resolved)
       })
       .catch(() => {
         // A failed import is not an error worth surfacing — the monogram is a
@@ -68,25 +77,25 @@ export function Portrait({
 
   return (
     <div className={['relative', size, className].filter(Boolean).join(' ')}>
-      {/* Soft cyan glow. Decorative, so it never reaches assistive tech. */}
+      {/* Soft blue glow. Decorative, so it never reaches assistive tech. */}
       <div
         aria-hidden="true"
-        className={`absolute -inset-5 ${radius} bg-wash-cyan/35 blur-2xl motion-reduce:hidden`}
+        className={`absolute -inset-5 ${radius} bg-wash-blue/45 blur-2xl motion-reduce:hidden`}
       />
 
       {/* Gradient ring: a gradient plate with the photo inset over it. */}
       <div
-        className={`relative p-[3px] ${radius} bg-[linear-gradient(140deg,var(--color-accent),var(--color-secondary)_50%,var(--color-accent))]`}
+        className={`ring-identity relative p-[3px] ${radius}`}
       >
         <div className={`overflow-hidden ${radius} bg-surface`}>
           <img
             src={source}
-            alt={profile.alt}
+            alt="Vishesh Khanna"
             width={profile.width}
             height={profile.height}
             loading={priority ? 'eager' : 'lazy'}
             decoding="async"
-            className="size-full object-cover"
+            className="size-full object-cover object-[center_top]"
           />
         </div>
       </div>
@@ -109,11 +118,11 @@ function Monogram({ shape, size, className }) {
     <div className={['relative', size, className].filter(Boolean).join(' ')}>
       <div
         aria-hidden="true"
-        className={`absolute -inset-5 ${radius} bg-wash-cyan/35 blur-2xl motion-reduce:hidden`}
+        className={`absolute -inset-5 ${radius} bg-wash-blue/45 blur-2xl motion-reduce:hidden`}
       />
 
       <div
-        className={`relative grid size-full place-items-center ${radius} border border-border-strong bg-[linear-gradient(140deg,var(--color-wash-blue),var(--color-wash-cyan))] text-accent-on`}
+        className={`plate-identity relative grid size-full place-items-center ${radius} text-accent-on`}
       >
         <span
           className={`font-mono tracking-tight ${

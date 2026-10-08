@@ -22,12 +22,14 @@ export function Contact() {
     <Section id="contact" labelledBy="contact-heading">
       <Container width="wide">
         <div className="flex flex-col items-center gap-4 text-center">
-          <Reveal as="p" className="font-mono text-micro tracking-widest text-accent-ink uppercase">
-            Contact
+          <Reveal as="p" className="flex items-center gap-3 font-mono text-micro tracking-widest text-accent-ink uppercase">
+            <span aria-hidden="true" className="eyebrow-rule h-px w-6" />
+            <span className="section-index" data-index="05">Contact</span>
+            <span aria-hidden="true" className="eyebrow-rule h-px w-6" />
           </Reveal>
 
           <Reveal as="h2" id="contact-heading" className="text-display-sm text-foreground-strong">
-            Get In Touch
+            Get in <span className="font-display italic">touch</span>
           </Reveal>
 
           <Reveal as="p" className="mx-auto max-w-[54ch] text-body text-muted">
@@ -37,7 +39,7 @@ export function Contact() {
         </div>
 
         <div className="mx-auto mt-12 flex max-w-2xl flex-col gap-8">
-          <Reveal className="card p-6 sm:p-8">
+          <Reveal className="card pop p-6 sm:p-8">
             <ContactForm />
           </Reveal>
 

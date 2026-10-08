@@ -77,9 +77,11 @@ export function Projects() {
         <div className="flex flex-col items-center gap-4 text-center">
           <Reveal
             as="p"
-            className="font-mono text-micro tracking-widest text-accent-ink uppercase"
+            className="flex items-center gap-3 font-mono text-micro tracking-widest text-accent-ink uppercase"
           >
-            Work
+            <span aria-hidden="true" className="eyebrow-rule h-px w-6" />
+            <span className="section-index" data-index="04">Work</span>
+            <span aria-hidden="true" className="eyebrow-rule h-px w-6" />
           </Reveal>
 
           <Reveal
@@ -87,7 +89,7 @@ export function Projects() {
             id="projects-heading"
             className="text-center text-display-sm text-foreground-strong"
           >
-            Featured Projects
+            Featured <span className="font-display italic">projects</span>
           </Reveal>
 
           <Reveal as="p" className="mx-auto max-w-[54ch] text-body text-muted">
@@ -96,7 +98,7 @@ export function Projects() {
           </Reveal>
         </div>
 
-        <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-12 grid items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project, index) => (
             <ProjectCard
               key={project.id}
@@ -104,6 +106,7 @@ export function Projects() {
                 cardRefs.current[index] = element
               }}
               project={project}
+              index={index}
               onOpen={() => setOpenIndex(index)}
             />
           ))}
