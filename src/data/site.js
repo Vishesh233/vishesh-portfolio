@@ -206,6 +206,9 @@ export const certifications = [
  * `liveUrl: null`, and every consumer treats a null liveUrl as "render no Live
  * Demo button at all".
  *
+ * `cardStack` is optional: the chips a card shows when `stack` is longer than
+ * 7 (default: the first 7). The card appends a "+N" chip for the rest.
+ *
  * `gallery` is optional: `{ image, alt, caption, portrait? }` entries rendered
  * as a "Screens" grid in the modal. `portrait` letterboxes a phone screenshot
  * instead of cropping it. Order is presentation order; LibVerse is first.
@@ -260,6 +263,8 @@ export const projects = [
       'Render',
       'MongoDB Atlas',
     ],
+    // Chips shown on the card; the modal lists the full `stack`.
+    cardStack: ['React', 'Node.js', 'Express', 'MongoDB', 'Flask', 'Tailwind CSS', 'Jest'],
     gallery: [
       { image: 'libverse-student', alt: 'LibVerse student dashboard.', caption: 'Student dashboard' },
       { image: 'libverse-librarian', alt: 'LibVerse librarian dashboard.', caption: 'Librarian dashboard' },

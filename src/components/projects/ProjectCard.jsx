@@ -26,6 +26,9 @@ import { ProjectImage } from '../ui/ProjectImage.jsx'
  * width on a phone, and a wrong value would make the browser download the
  * largest candidate for every device.
  */
+/** Stack chips shown on a card before the rest collapse into a "+N" chip. */
+const MAX_CARD_CHIPS = 7
+
 export const ProjectCard = forwardRef(function ProjectCard(
   { project, index = 0, onOpen },
   ref,
@@ -38,6 +41,9 @@ export const ProjectCard = forwardRef(function ProjectCard(
   const [isActive, setIsActive] = useState(false)
 
   const showHint = isActive
+
+  const cardStack = project.cardStack ?? project.stack.slice(0, MAX_CARD_CHIPS)
+  const hiddenCount = project.stack.length - cardStack.length
 
   return (
     <motion.li
@@ -118,13 +124,13 @@ export const ProjectCard = forwardRef(function ProjectCard(
           </p>
 
           {/*
-            Every tag in the stack is listed. InterviewPilot's approved stack is
-            seven items and truncating it would hide the Gemini API entry, which
-            is the single most distinguishing fact about that project. Quiet
+            Up to seven tags, then a "+N" chip; the modal lists the full stack.
+            InterviewPilot's seven-item stack (including the Gemini API entry) stays
+            whole. Quiet
             mono tags with gold separators — no boxes.
           */}
           <ul className="mt-auto flex flex-wrap gap-x-3 gap-y-1 pt-2">
-            {project.stack.map((item) => (
+            {cardStack.map((item) => (
               <li
                 key={item}
                 className="font-mono text-micro text-muted-strong"
@@ -133,6 +139,12 @@ export const ProjectCard = forwardRef(function ProjectCard(
                 {item}
               </li>
             ))}
+            {hiddenCount > 0 && (
+              <li className="font-mono text-micro text-muted-strong">
+                <span aria-hidden="true" className="text-gilt mr-1.5">·</span>
+                <span className="sr-only">and </span>+{hiddenCount}<span className="sr-only"> more technologies</span>
+              </li>
+            )}
           </ul>
         </div>
       </motion.button>
