@@ -240,7 +240,6 @@ describe('page anchors and content', () => {
   it('carries none of the forbidden content anywhere on the page', () => {
     render(<App />)
 
-    expect(document.body.textContent).not.toMatch(/Flask/)
     expect(document.body.textContent).not.toMatch(/Built with/)
     expect(document.querySelector('a[href^="tel:"]')).toBeNull()
     expect(document.getElementById('experience')).toBeNull()

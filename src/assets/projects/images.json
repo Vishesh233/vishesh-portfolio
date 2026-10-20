@@ -32,36 +32,199 @@
       }
     ]
   },
+  "libverse-admin": {
+    "width": 1440,
+    "height": 900,
+    "png": "libverse-admin.png",
+    "webp": "libverse-admin.webp",
+    "variants": [
+      {
+        "width": 1440,
+        "file": "libverse-admin.webp",
+        "bytes": 46900
+      },
+      {
+        "width": 480,
+        "file": "libverse-admin-480.webp",
+        "bytes": 8996
+      },
+      {
+        "width": 768,
+        "file": "libverse-admin-768.webp",
+        "bytes": 18016
+      },
+      {
+        "width": 1024,
+        "file": "libverse-admin-1024.webp",
+        "bytes": 27838
+      }
+    ]
+  },
+  "libverse-card": {
+    "width": 1440,
+    "height": 900,
+    "png": "libverse-card.png",
+    "webp": "libverse-card.webp",
+    "variants": [
+      {
+        "width": 1440,
+        "file": "libverse-card.webp",
+        "bytes": 51342
+      },
+      {
+        "width": 480,
+        "file": "libverse-card-480.webp",
+        "bytes": 9480
+      },
+      {
+        "width": 768,
+        "file": "libverse-card-768.webp",
+        "bytes": 20622
+      },
+      {
+        "width": 1024,
+        "file": "libverse-card-1024.webp",
+        "bytes": 31848
+      }
+    ]
+  },
+  "libverse-librarian": {
+    "width": 1440,
+    "height": 900,
+    "png": "libverse-librarian.png",
+    "webp": "libverse-librarian.webp",
+    "variants": [
+      {
+        "width": 1440,
+        "file": "libverse-librarian.webp",
+        "bytes": 70586
+      },
+      {
+        "width": 480,
+        "file": "libverse-librarian-480.webp",
+        "bytes": 13920
+      },
+      {
+        "width": 768,
+        "file": "libverse-librarian-768.webp",
+        "bytes": 29152
+      },
+      {
+        "width": 1024,
+        "file": "libverse-librarian-1024.webp",
+        "bytes": 44266
+      }
+    ]
+  },
+  "libverse-mobile": {
+    "width": 780,
+    "height": 1688,
+    "png": "libverse-mobile.png",
+    "webp": "libverse-mobile.webp",
+    "variants": [
+      {
+        "width": 780,
+        "file": "libverse-mobile.webp",
+        "bytes": 66168
+      },
+      {
+        "width": 480,
+        "file": "libverse-mobile-480.webp",
+        "bytes": 36250
+      },
+      {
+        "width": 768,
+        "file": "libverse-mobile-768.webp",
+        "bytes": 63954
+      }
+    ]
+  },
+  "libverse-scan": {
+    "width": 1440,
+    "height": 900,
+    "png": "libverse-scan.png",
+    "webp": "libverse-scan.webp",
+    "variants": [
+      {
+        "width": 1440,
+        "file": "libverse-scan.webp",
+        "bytes": 32772
+      },
+      {
+        "width": 480,
+        "file": "libverse-scan-480.webp",
+        "bytes": 5846
+      },
+      {
+        "width": 768,
+        "file": "libverse-scan-768.webp",
+        "bytes": 13006
+      },
+      {
+        "width": 1024,
+        "file": "libverse-scan-1024.webp",
+        "bytes": 20218
+      }
+    ]
+  },
+  "libverse-student": {
+    "width": 1440,
+    "height": 900,
+    "png": "libverse-student.png",
+    "webp": "libverse-student.webp",
+    "variants": [
+      {
+        "width": 1440,
+        "file": "libverse-student.webp",
+        "bytes": 62988
+      },
+      {
+        "width": 480,
+        "file": "libverse-student-480.webp",
+        "bytes": 12130
+      },
+      {
+        "width": 768,
+        "file": "libverse-student-768.webp",
+        "bytes": 26514
+      },
+      {
+        "width": 1024,
+        "file": "libverse-student-1024.webp",
+        "bytes": 40154
+      }
+    ]
+  },
   "libverse": {
-    "width": 1919,
-    "height": 1048,
+    "width": 1600,
+    "height": 900,
     "png": "libverse.png",
     "webp": "libverse.webp",
     "variants": [
       {
-        "width": 1919,
+        "width": 1600,
         "file": "libverse.webp",
-        "bytes": 63006
+        "bytes": 91746
       },
       {
         "width": 480,
         "file": "libverse-480.webp",
-        "bytes": 7260
+        "bytes": 15494
       },
       {
         "width": 768,
         "file": "libverse-768.webp",
-        "bytes": 14572
+        "bytes": 31122
       },
       {
         "width": 1024,
         "file": "libverse-1024.webp",
-        "bytes": 23700
+        "bytes": 48430
       },
       {
         "width": 1440,
         "file": "libverse-1440.webp",
-        "bytes": 40942
+        "bytes": 79390
       }
     ]
   },

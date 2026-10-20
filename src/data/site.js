@@ -202,9 +202,13 @@ export const certifications = [
  * URL and a `srcset` happens in src/lib/images.js, so the dimensions here are
  * never hand-written and can never drift from the files on disk.
  *
- * `liveUrl` is set only for InterviewPilot, from that repository's own
- * homepage field. LibVerse and QR Code Studio have `liveUrl: null`, and every
- * consumer treats a null liveUrl as "render no Live Demo button at all".
+ * `liveUrl` is set for LibVerse and InterviewPilot. QR Code Studio has
+ * `liveUrl: null`, and every consumer treats a null liveUrl as "render no Live
+ * Demo button at all".
+ *
+ * `gallery` is optional: `{ image, alt, caption, portrait? }` entries rendered
+ * as a "Screens" grid in the modal. `portrait` letterboxes a phone screenshot
+ * instead of cropping it. Order is presentation order; LibVerse is first.
  *
  * `categoryLabel` is the short form shown on a card; `category` is the longer
  * form shown in the modal. Both describe what the project is, neither asserts
@@ -219,31 +223,51 @@ export const certifications = [
 export const projects = [
   {
     id: 'libverse',
-    name: 'LibVerse',
+    name: 'LibVerse: Smart Library Management System',
     image: 'libverse',
     imageAlt:
-      'LibVerse interface showing the library management dashboard with book records and role-based navigation.',
+      'LibVerse hero image showing the Student, Librarian and Admin portals of the library management system.',
     category: 'Full-stack web app',
-    tagline: 'Role-based library management',
+    tagline: 'Student, Librarian and Admin portals',
     summary:
-      'A library management system built around role-based access control, with a separate portal for each of the three user roles and a shared catalogue underneath.',
+      'Full-stack library system with Student, Librarian and Admin portals: borrowing, renewals, reservations with 48-hour holds, fines and waivers, QR scan desk and signed library cards, analytics and reports, and explainable AI book picks. Pick a role and explore, no sign-up needed.',
     repository: 'https://github.com/Vishesh233/LibVerse',
-    liveUrl: null,
+    liveUrl: 'https://lib-verse.vercel.app/demo',
+    liveUrlNote: 'No sign-up needed',
     overview:
-      'LibVerse is a full-stack library management system organised around role-based access control. A custom JWT auth middleware guards the API, and the three roles — Student, Librarian and Super Admin — each get their own portal containing the features that role actually needs rather than one shared interface with hidden buttons.',
+      'A full-stack library system with Student, Librarian and Admin portals covering borrowing, renewals, reservations with 48-hour holds, fines and waivers, a QR scan desk and signed library cards, analytics and reports, and explainable AI book picks. The live demo lets you pick a role and explore without signing up.',
     features: [
-      'Role-based access control with JWT authentication across Student, Librarian and Super Admin portals (50+ features)',
-      'Book CRUD with search and filtering',
-      'Wishlists',
-      'Personalised book recommendations',
-      'Issue and return workflows',
-      'Image upload handled with Multer and Sharp',
-      'Analytics dashboards built on 1,000+ simulated records',
-      'Reusable components and custom hooks that cut duplicate UI code by 40%',
+      "Atomic stock updates so two librarians can't over-issue a book",
+      'Google sign-in, email OTP login and email verification',
+      'Flask + TF-IDF recommendations with automatic fallback',
+      '200+ Jest/pytest tests and GitHub Actions CI',
+      'Isolated demo database that resets every 6 hours',
     ],
-    stack: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'JWT'],
-    notes:
-      'Dashboard figures are generated rather than drawn from a live catalogue, and are labelled as simulated throughout the interface.',
+    stack: [
+      'React',
+      'Vite',
+      'Tailwind CSS',
+      'Node.js',
+      'Express',
+      'MongoDB',
+      'Mongoose',
+      'Flask',
+      'scikit-learn',
+      'JWT',
+      'Jest',
+      'GitHub Actions',
+      'Vercel',
+      'Render',
+      'MongoDB Atlas',
+    ],
+    gallery: [
+      { image: 'libverse-student', alt: 'LibVerse student dashboard.', caption: 'Student dashboard' },
+      { image: 'libverse-librarian', alt: 'LibVerse librarian dashboard.', caption: 'Librarian dashboard' },
+      { image: 'libverse-admin', alt: 'LibVerse admin analytics dashboard.', caption: 'Admin analytics' },
+      { image: 'libverse-scan', alt: 'LibVerse librarian QR scan desk.', caption: 'QR scan desk' },
+      { image: 'libverse-card', alt: 'LibVerse digital library card, front side.', caption: 'Library card' },
+      { image: 'libverse-mobile', alt: 'LibVerse student dashboard on a phone.', caption: 'Mobile', portrait: true },
+    ],
   },
   {
     id: 'interviewpilot',

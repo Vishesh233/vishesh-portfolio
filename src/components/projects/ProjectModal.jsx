@@ -255,6 +255,38 @@ export function ProjectModalPanel({
             </ul>
           </div>
 
+          {project.gallery?.length > 0 && (
+            <div className="mt-7">
+              <h4 className="flex items-center gap-2 font-mono text-micro tracking-widest text-accent-ink uppercase">
+                <span aria-hidden="true" className="h-px w-4 bg-accent/70" />
+                Screens
+              </h4>
+              <ul className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {project.gallery.map((shot) => (
+                  <li key={shot.image}>
+                    <figure className="flex flex-col gap-1.5">
+                      <div className="aspect-[16/10] overflow-hidden rounded-sm border border-border bg-background">
+                        <ProjectImage
+                          name={shot.image}
+                          alt={shot.alt}
+                          sizes="(min-width: 640px) 16rem, 45vw"
+                          className="size-full"
+                          imgClassName={[
+                            'size-full',
+                            shot.portrait ? 'object-contain' : 'object-cover object-top',
+                          ].join(' ')}
+                        />
+                      </div>
+                      <figcaption className="font-mono text-micro text-subtle">
+                        {shot.caption}
+                      </figcaption>
+                    </figure>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="mt-7">
             <h4 className="flex items-center gap-2 font-mono text-micro tracking-widest text-accent-ink uppercase">
               <span aria-hidden="true" className="h-px w-4 bg-accent/70" />
