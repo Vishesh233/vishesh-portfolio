@@ -1,122 +1,64 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useEffect } from 'react'
+import { SkipLink } from './components/layout/SkipLink.jsx'
+import { SiteHeader } from './components/layout/SiteHeader.jsx'
+import { SiteFooter } from './components/layout/SiteFooter.jsx'
+import { Hero } from './components/sections/Hero.jsx'
+import { About } from './components/sections/About.jsx'
+import { Skills } from './components/sections/Skills.jsx'
+import { Education } from './components/sections/Education.jsx'
+import { Projects } from './components/sections/Projects.jsx'
+import { Contact } from './components/sections/Contact.jsx'
+import { installCursorGlow } from './lib/cursorGlow.js'
 
-function App() {
-  const [count, setCount] = useState(0)
+/**
+ * Application shell.
+ *
+ * Owns exactly four things:
+ *   1. document landmarks (skip link, header, main, footer)
+ *   2. the page background
+ *   3. the section mount points
+ *   4. the cursor light — one delegated listener set for every card/box on
+ *      the page (see src/lib/cursorGlow.js), bound once here rather than
+ *      per component so the effect and the `.pop`/`.card` CSS stay a pair
+ *
+ * Everything else belongs to a section component.
+ *
+ * BACKDROP
+ * Deliberately restrained. The glow blobs belong to the hero alone, per the
+ * brief — repeating them across the whole page is what makes a portfolio look
+ * like a gradient template. Everything below the hero composites over the
+ * plain `--color-background` (plus, in the dark theme, the faint canvas
+ * gradient declared in base.css).
+ *
+ * SECTION ORDER
+ * Hero, About, Skills, Education, Projects, Contact — matching the `sections`
+ * registry in src/data/site.js, which the header's scroll-spy also reads, so
+ * every nav link resolves to a section that is actually mounted.
+ *
+ * `deferred` hands off-screen sections to the browser via content-visibility.
+ * It is NOT applied to the hero, which is on screen immediately.
+ */
+export default function App() {
+  // StrictMode double-invokes effects in development: the second install
+  // runs after the first cleanup, so exactly one listener set survives.
+  useEffect(() => installCursorGlow(), [])
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      <SkipLink />
 
-      <div className="ticks"></div>
+      <SiteHeader />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <main id="main" tabIndex={-1} className="focus:outline-none">
+        <Hero />
+        <About deferred />
+        <Skills deferred />
+        <Education deferred />
+        <Projects deferred />
+        <Contact />
+      </main>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      <SiteFooter />
     </>
   )
 }
-
-export default App

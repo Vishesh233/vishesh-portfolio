@@ -1,0 +1,6 @@
+# Allow every crawler full access. There is no sitemap line yet: a sitemap
+# needs the deployed URL, which does not exist while the site has no public
+# host. (Without this file the dev/preview server answers robots.txt with the
+# page's HTML, which crawlers report as an invalid robots.txt.)
+User-agent: *
+Allow: /

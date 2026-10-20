@@ -1,0 +1,525 @@
+/* ============================================================================
+   UTILITIES
+   A deliberately small set of project-level primitives. Tailwind already covers
+   the long tail — these exist only where the design system needs a named,
+   reusable behaviour.
+
+   RETIRED OVER SUCCESSIVE REDESIGNS
+   `glass`/`glass-strong` (glassmorphism is out), `grain`/`grain-overlay`,
+   `panel` (replaced by `card`), `wash-subtle`, `mask-field`, `canvas-layer`
+   and `canvas-interactive` (belonged to a deleted 3D/SVG plate system), plus
+   the retired `gutter`, `rule-t` and `rule-b` (each dead code, with a note at
+   its original site).
+   ========================================================================= */
+
+/* ---------------------------------------------------------------------
+   CARD
+   The one surface primitive. Modest radius, a subtle cool hairline and a
+   restrained shadow — no heavy glass, no coloured border at rest. Dark
+   surfaces carry a whisper of teal via the layered gradient, so cards read
+   as lit rather than tinted.
+   --------------------------------------------------------------------- */
+@utility card {
+  background-color: var(--color-surface);
+  background-image: linear-gradient(
+    160deg,
+    light-dark(rgb(63 95 232 / 0.02), rgb(34 199 184 / 0.05)),
+    transparent 55%
+  );
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-e1);
+}
+
+/* `card-interactive` (per-surface hover border/shadow) was retired here once
+   the hover-pop treatment at the bottom of this file existed: pop owns
+   transform, border and shadow together, so a second hover implementation
+   would only fight it over the same properties for the same moment. */
+/* ---------------------------------------------------------------------
+   LAYOUT RHYTHM
+   `section` establishes the vertical cadence of the page. Every section uses
+   it, so the rhythm is never re-decided per component.
+   --------------------------------------------------------------------- */
+@utility section {
+  position: relative;
+  padding-block: var(--spacing-section-sm);
+  scroll-margin-top: var(--header-height);
+}
+
+@media (width >= 48rem) {
+  .section {
+    padding-block: var(--spacing-section);
+  }
+}
+
+/* Horizontal gutter applied to every full-bleed section — retired as dead
+   code: Container owns horizontal padding via `px-gutter`. */
+
+/* ---------------------------------------------------------------------
+   PERFORMANCE
+   `defer` hands rendering of off-screen sections to the browser, which is the
+   single biggest win for a page that will eventually carry WebGL contexts.
+   `contain-intrinsic-size` reserves the space so the scrollbar does not jump
+   as sections resolve.
+   --------------------------------------------------------------------- */
+@utility defer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+/* ---------------------------------------------------------------------
+   HAIRLINES
+   Thin rules structure content without drawing boxes around it.
+   --------------------------------------------------------------------- */
+/* `rule-t` and `rule-b` lived here and were removed as dead code — nothing
+   referenced them, and borders are drawn per component. */
+
+/* `rule-accent-active` — the accent underline that marked the active
+   navigation item — was retired with the pill nav: the active item is now a
+   filled pill carrying its own hairline and shadow, which reports "you are
+   here" without a pseudo-element. */
+
+/* ---------------------------------------------------------------------
+   HOVER POP + CURSOR LIGHT
+   The one shared hover treatment. Every interactive surface — project,
+   skill, stat and info cards, buttons, nav links, chips, icon links —
+   lifts 4px, scales slightly, adopts an accent hairline and a stronger
+   shadow. One implementation means the affordance feels identical
+   everywhere, and the scale differs only by size (controls 1.04,
+   surfaces 1.02) without the pattern fragmenting.
+
+   BOXES ARE BOXES, ACTIONABLE OR NOT
+   `.card` and `.panel` share the same gates so a non-actionable box (a
+   stat tile) or a box that must not move (the modal panel) still answers
+   hover the way every other surface does — the panel skips only the
+   transform, because a dialog that jumps while you read it is a defect.
+
+   CURSOR LIGHT
+   A soft warm radial lives in `::before` and follows the pointer inside
+   the box: src/lib/cursorGlow.js writes `--mx`/`--my` on the hovered
+   element (rAF-throttled pointermove, bound to that element only) and
+   the gradient reads them — defaulting to a static 50% 50%, which is
+   what `:focus-visible` and `prefers-reduced-motion` get, since neither
+   has a moving pointer to track. Each box declares its own stacking
+   context (position + z-index) so the `z-index: -1` pseudo paints ABOVE
+   the surface colour but BELOW all text: the light never washes out
+   copy, and the contrast script checks text over the worst-case glow
+   blend for exactly that reason. The tint is ambient Twilight/Moonstone
+   light — teal and lavender in dark, a breath of blue in light — at
+   restrained alpha, never neon.
+
+   GATE STACK, in order:
+   · `@media (hover: hover)` — touch devices never get a hover state stuck
+     from a tap, so the lift and the light live only where a real pointer
+     exists. cursorGlow.js mirrors this gate before writing anything.
+   · `:focus-visible` — keyboard users get the same affordance a pointer
+     does, outside the hover query because focus works without a pointer.
+   · `prefers-reduced-motion` — colour and shadow remain (they carry the
+     meaning of the affordance); movement does not, and the light stays a
+     static centred glow. base.css's global rule additionally collapses
+     the transition to an instant change.
+   --------------------------------------------------------------------- */
+.pop,
+.pop-strong,
+.card,
+.panel {
+  /* The stacking context the glow's z-index:-1 pseudo paints inside —
+     without it the light would fall behind the surface it belongs to. */
+  position: relative;
+  z-index: 0;
+}
+
+.pop,
+.pop-strong {
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out,
+    border-color 200ms ease-out,
+    color 200ms ease-out;
+}
+
+/* The panel takes the colours of the treatment but not the transform. */
+.panel {
+  transition:
+    box-shadow 200ms ease-out,
+    border-color 200ms ease-out;
+}
+
+/* The light itself. Hidden at rest; `--mx`/`--my` fall back to the
+   centre, so keyboard focus and reduced motion show a static glow.
+   The LIGHT alpha is deliberately small: the light theme's text is dark
+   on a light surface, so a strong tint would darken the page under the
+   copy and cost contrast — Moonstone gets a breath of blue and lavender
+   at low alpha. Twilight can carry a fuller teal→lavender bloom, because
+   lightening its canvas costs far less. Both blends are the worst-case
+   cores checked in scripts/contrast-check.mjs. */
+.pop::before,
+.pop-strong::before,
+.card::before,
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle 220px at var(--mx, 50%) var(--my, 50%),
+    light-dark(rgb(63 95 232 / 0.07), rgb(34 199 184 / 0.14)),
+    light-dark(rgb(155 124 255 / 0.05), rgb(139 109 255 / 0.1)) 45%,
+    transparent 70%
+  );
+  transition: opacity 200ms ease-out;
+}
+
+@media (hover: hover) {
+  .pop:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: var(--color-pop-border);
+    box-shadow: var(--shadow-pop);
+  }
+
+  .pop-strong:hover {
+    transform: translateY(-4px) scale(1.04);
+    border-color: var(--color-pop-border);
+    box-shadow: var(--shadow-pop);
+  }
+
+  /* Boxes with no lift still get the hairline and the soft ambient edge
+     glow — the pop's shadow carries the glow layer. */
+  .card:hover,
+  .panel:hover {
+    border-color: var(--color-pop-border);
+    box-shadow: var(--shadow-pop);
+  }
+
+  .pop:hover::before,
+  .pop-strong:hover::before,
+  .card:hover::before,
+  .panel:hover::before {
+    opacity: 1;
+  }
+}
+
+.pop:focus-visible,
+.pop-strong:focus-visible {
+  transform: translateY(-4px) scale(1.02);
+  border-color: var(--color-pop-border);
+  box-shadow: var(--shadow-pop);
+}
+
+.pop-strong:focus-visible {
+  transform: translateY(-4px) scale(1.04);
+}
+
+.card:focus-visible,
+.panel:focus-visible {
+  border-color: var(--color-pop-border);
+  box-shadow: var(--shadow-pop);
+}
+
+/* Keyboard equivalent of the cursor light: the same glow, centred,
+   because focus is not driven by a pointer position. */
+.pop:focus-visible::before,
+.pop-strong:focus-visible::before,
+.card:focus-visible::before,
+.panel:focus-visible::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop:hover,
+  .pop:focus-visible,
+  .pop-strong:hover,
+  .pop-strong:focus-visible {
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   DOTS, NODES AND LABELS
+   The small round dots on the About info cards and the icon nodes on the
+   education timeline answer a hover with a stronger glow bloom, and the
+   labels beside them brighten to the text-safe accent. Colour only — so,
+   exactly like the pop's hairline, it survives `prefers-reduced-motion`
+   while the movement it accompanies does not.
+
+   The timeline node rule is scoped with `:has()` rather than `:hover` on
+   the list item: an item spans both halves of the rail, and pointing at
+   the empty half must not light up a card the pointer never touched.
+   --------------------------------------------------------------------- */
+.info-dot {
+  transition: box-shadow 200ms ease-out;
+}
+
+@media (hover: hover) {
+  .card:hover .info-dot {
+    box-shadow:
+      0 0 0 3px light-dark(rgb(36 185 172 / 0.24), rgb(34 199 184 / 0.32)),
+      0 0 14px 3px light-dark(rgb(36 185 172 / 0.32), rgb(34 199 184 / 0.45));
+  }
+
+  .card:hover .info-label,
+  .timeline-card:hover .timeline-label {
+    color: var(--color-accent-ink);
+  }
+
+  .timeline-item:has(.timeline-card:hover) .timeline-node,
+  .timeline-node:hover {
+    border-color: var(--color-pop-border);
+    box-shadow:
+      0 0 0 4px var(--color-background),
+      0 0 0 7px light-dark(rgb(58 85 216 / 0.28), rgb(34 199 184 / 0.35)),
+      0 0 22px 4px light-dark(rgb(63 95 232 / 0.3), rgb(139 109 255 / 0.4));
+  }
+
+  /* The stat number warms to gold on hover — the brief's "occasional
+     hover detail", paired at the 4.5:1 text floor in
+     scripts/contrast-check.mjs. */
+  .stat-tile:hover .stat-value {
+    color: var(--color-stat-hover);
+  }
+
+  /* Stat figures are editorial, not boxed: neutralise the shared card box
+     while keeping the `card` class (and its cursor light) intact. The two
+     `!important` flags are scoped to this one pairing — they undo the box,
+     nothing else. */
+  .stat-tile.card {
+    background-image: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .stat-tile.card:hover {
+    border-color: transparent !important;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   EDUCATION TIMELINE
+   A centre-line rail with round icon nodes; cards stack to the right of
+   the rail on mobile and alternate either side of it from lg up.
+
+   The rail is one gradient pseudo-element on the list — not a border per
+   entry — and fades out at both ends so it reads as a continuum rather
+   than a bracket. Each node rides the rail at the same left offset,
+   masked by a background-coloured ring so the line appears to pass
+   behind the node. Alternation itself is data: Education.jsx assigns
+   `lg:col-start-1`/`lg:col-start-2` from the entry's index, so this
+   file only owns geometry.
+   --------------------------------------------------------------------- */
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 1.1875rem;
+  width: 2px;
+  transform: translateX(-50%);
+  background-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--color-accent) 5%,
+    var(--color-secondary) 50%,
+    var(--color-accent) 95%,
+    transparent 100%
+  );
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 3.25rem;
+}
+
+.timeline-node {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.1875rem;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-raised);
+  color: var(--color-secondary-ink);
+  /* The background ring masks the rail where the node sits on it, so the
+     line runs behind the node instead of into its edge. The outer ring is
+     gold — the timeline's milestone detail, a jewelry touch rather than a
+     structural border. */
+  box-shadow:
+    0 0 0 4px var(--color-background),
+    0 0 0 5px light-dark(rgb(181 139 69 / 0.3), rgb(198 161 91 / 0.28));
+  transition:
+    box-shadow 200ms ease-out,
+    border-color 200ms ease-out,
+    color 200ms ease-out;
+}
+
+@media (width >= 64rem) {
+  .timeline::before {
+    left: 50%;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 4.5rem;
+    padding-left: 0;
+  }
+
+  .timeline-node {
+    left: 50%;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   SCROLL HINT
+   The hero's scroll-down arrow: a gentle 2D translate loop. Static under
+   reduced motion — here in the query, and again by base.css's global
+   animation kill, which also collapses the loop if it is mid-flight.
+   --------------------------------------------------------------------- */
+@keyframes scroll-hint {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+.scroll-hint {
+  animation: scroll-hint 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   GRADIENT NAME
+   The hero h1. Stops come from theme tokens: Moonstone runs blue → teal →
+   lavender, Twilight runs teal → lavender → blue — the brief's hero
+   direction at AA-safe strength. The gradient paints the glyphs via
+   `background-clip: text`; the theme resolves the stops, so contrast is a
+   token-level guarantee, not a per-use one.
+   --------------------------------------------------------------------- */
+.text-gradient-name {
+  background-image: linear-gradient(
+    90deg,
+    var(--gradient-name-from),
+    var(--gradient-name-mid),
+    var(--gradient-name-to)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------------------------------------------------------------------
+   EDITORIAL NUMBERING + ARCHITECTURAL DETAIL
+   Numbered sections, hairline rules and restrained accent treatments that
+   lift the page from "card grid" to editorial case-study rhythm. All
+   decorative: numbers are aria-hidden where they duplicate a heading.
+   --------------------------------------------------------------------- */
+
+/* Eyebrow kicker rules: the lavender hairline flanking each section label.
+   Sections keep their existing Reveal kickers; this class styles the
+   pairing via markup order. The label itself stays accent ink — teal/blue
+   for the section voice — with gold reserved for the numeral below. */
+.eyebrow-rule {
+  background-color: var(--color-secondary);
+}
+
+/* Section index numeral — the brief's tiny gold "section marker": quiet,
+   architectural, the one place gold appears at heading level. Rendered via
+   `data-index` so no content change is needed: the number is a style. */
+.section-index {
+  position: relative;
+}
+
+.section-index::before {
+  content: attr(data-index);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-widest);
+  color: var(--color-gold-ink);
+  margin-bottom: 0.75rem;
+}
+
+/* Thin architectural separator between editorial blocks. */
+.rule-warm {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+/* A card variant with an accent spine: the left edge runs teal → lavender
+   (blue → lavender in light) and identifies the entry — projects,
+   timeline cards — without boxing everything in glow. */
+.card-spine {
+  position: relative;
+}
+
+.card-spine::after {
+  content: '';
+  position: absolute;
+  top: 1.25rem;
+  bottom: 1.25rem;
+  left: 0;
+  width: 2px;
+  border-radius: 2px;
+  background-image: linear-gradient(
+    180deg,
+    var(--color-accent),
+    var(--color-secondary)
+  );
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* Restrained gold metadata: micro labels, counts, separators, arrows —
+   the brief's "small metadata highlights". Uses the text-safe gold so tiny
+   type keeps AA; never the only affordance, never a fill. */
+.text-gilt {
+  color: var(--color-gold-ink);
+}
+
+/* Portrait ring: the theme's identity trio — blue → teal → lavender in
+   light, teal → lavender → blue in dark — so no corner is a dead flat
+   spot yet nothing reads neon. Decorative, never text. */
+.ring-identity {
+  background-image: linear-gradient(
+    140deg,
+    var(--identity-from),
+    var(--identity-mid) 50%,
+    var(--identity-to)
+  );
+}
+
+/* Identity monogram plate (photo fallback): a deep twilight glass in both
+   themes — navy shaded through teal and violet — with a whisper of gold at
+   the edge. The letter is `--color-plate-ink`, so it stays legible
+   regardless of the page behind it. */
+.plate-identity {
+  background-image: linear-gradient(
+    140deg,
+    light-dark(#1B2540, #0D1220),
+    light-dark(#123B3C, #0F2029) 55%,
+    light-dark(#2A2145, #161228)
+  );
+  border: 1px solid light-dark(rgb(181 139 69 / 0.45), rgb(198 161 91 / 0.4));
+  color: var(--color-plate-ink);
+}

@@ -1,0 +1,375 @@
+/* ============================================================================
+   DESIGN TOKENS
+   ----------------------------------------------------------------------------
+   The single source of truth for the visual language. Components never hardcode
+   a colour, radius, shadow or duration — they reference these tokens.
+
+   ART DIRECTION
+   ---- TWILIGHT MIST (dark) ----
+   A dark navy canvas with teal, lavender and electric blue as the primary
+   identity accents, and small touches of warm gold as the restrained premium
+   detail. The palette is cinematic and layered: deep navy canvases, translucent
+   surfaces, hairline borders, ambient glow, and gold used only as jewelry.
+
+   ---- MOONSTONE (light) ----
+   A soft blue-grey paper canvas with white surfaces, blue as the primary
+   accent, teal and lavender as supporting notes, and small warm-gold details.
+
+   THEME MODEL
+   Semantic tokens are declared with light-dark(). The browser resolves them
+   against the color-scheme property, which is itself driven by one attribute
+   on html (data-theme='light' | 'dark'). A theme switch is therefore a
+   single attribute write — no re-render, no class churn, no flash, because the
+   tokens follow the attribute automatically.
+
+   CONTRAST
+   Every foreground/background pair below meets WCAG AA — verified by
+   scripts/contrast-check.mjs in both themes, including hover, active and focus
+   states. Gradients and washes are paired with near-black / near-white text
+   where they appear as the only content.
+   =========================================================================== */
+
+@theme {
+  /* -------------------------------------------------------------------------
+     RAW PALETTE — fixed values, never swapped by theme.
+     Named for what they are, not where they are used.
+     ------------------------------------------------------------------------- */
+
+  /* ---- Twilight Mist: base canvases ---- */
+  --color-twilight-50: #080B14;
+  --color-twilight-100: #0D1220;
+  --color-twilight-200: #111827;
+  --color-twilight-300: #1A233A;
+  --color-twilight-400: #263550;
+  --color-twilight-500: #3A4B6B;
+  --color-twilight-600: #5A6B8B;
+  --color-twilight-700: #7A8BAF;
+  --color-twilight-800: #9AA6C4;
+  --color-twilight-900: #C3CADF;
+  --color-twilight-1000: #E0E4F0;
+
+  /* ---- Moonstone: base canvases ---- */
+  --color-moonstone-50: #F4F6FA;
+  --color-moonstone-100: #E9EDF5;
+  --color-moonstone-200: #FFFFFF;
+  --color-moonstone-300: #F2F5FA;
+  --color-moonstone-400: #DDE4F0;
+  --color-moonstone-500: #B9C6DA;
+  --color-moonstone-600: #8FA3B9;
+  --color-moonstone-700: #6B7F97;
+  --color-moonstone-800: #4A5C73;
+  --color-moonstone-900: #33415C;
+  --color-moonstone-1000: #172033;
+
+  /* ---- Ink ramp ---- */
+  --color-ink-50: #F3F4F6;
+  --color-ink-900: #172033;
+  --color-ink-950: #111827;
+
+  /* ---- Twilight primary accents: teal, lavender, blue ---- */
+  --color-teal-300: #2ED9CB;
+  --color-teal-400: #22C7B8; /* brief: dark-theme teal          */
+  --color-teal-500: #24B9AC; /* brief: light-theme teal         */
+  --color-teal-600: #1AA097;
+  --color-teal-700: #14877D;
+  --color-teal-800: #0E7C71;
+  --color-teal-900: #0F6B62;
+
+  --color-lavender-300: #A78BFA; /* brief: bright lavender       */
+  --color-lavender-400: #9B7CFF; /* brief: light-theme lavender  */
+  --color-lavender-500: #8B6DFF; /* brief: dark-theme lavender   */
+  --color-lavender-600: #7A5AD8;
+  --color-lavender-700: #6B4DB5;
+  --color-lavender-800: #553A8F;
+  --color-lavender-900: #432D6B;
+
+  --color-blue-300: #4F7CFF; /* brief: dark-theme electric blue */
+  --color-blue-400: #3F5FE8; /* brief: light-theme primary blue */
+  --color-blue-500: #3A55D8;
+  --color-blue-600: #3550CE;
+  --color-blue-700: #2C45B4;
+  --color-blue-800: #234183;
+  --color-blue-900: #1A3263;
+
+  /* ---- Twilight gold: tiny premium accent only ---- */
+  --color-gold-300: #D4AF6A; /* brief: bright gold accent       */
+  --color-gold-400: #C6A15B; /* brief: dark-theme gold          */
+  --color-gold-500: #B58B45; /* brief: light-theme gold         */
+  --color-gold-600: #A88545;
+  --color-gold-700: #8F6E38; /* text-safe on paper              */
+  --color-gold-800: #74582C;
+  --color-gold-900: #5B4521;
+
+  /* -------------------------------------------------------------------------
+     SEMANTIC TOKENS
+     What components actually reference. Resolved by light-dark(), so each
+     carries its light value first and its dark value second.
+     ------------------------------------------------------------------------- */
+
+  /* Background and surfaces — each theme's own base ramp in hierarchy
+     order: canvas → card → raised card. */
+  --color-background: light-dark(#F4F6FA, #080B14);
+  --color-surface: light-dark(#FFFFFF, #0D1220);
+  --color-surface-raised: light-dark(#E9EDF5, #111827);
+
+  /* Text — the brief's #172033 / #F3F4F6 with its secondary and muted
+     steps beneath. Every step clears WCAG AA (4.5:1) on every surface of
+     its own theme, including over the cursor light — verified in
+     scripts/contrast-check.mjs. `muted` is description copy, `muted-strong`
+     is labels and tags, `subtle` is the quietest text that still carries
+     meaning (notes, dates, placeholders). */
+  --color-foreground: light-dark(#172033, #F3F4F6);
+  --color-foreground-strong: light-dark(#101A2B, #F9FAFC);
+  --color-muted: light-dark(#536078, #A8B1C2);
+  --color-muted-strong: light-dark(#46516A, #C3CADF);
+  --color-subtle: light-dark(#626D80, #8B94A8);
+
+  /* Hairlines. The soft blue-grey of Moonstone, navy lines in Twilight. */
+  --color-border: light-dark(#DDE4F0, #263550);
+  /* `border-strong` OUTLINES CONTROLS (ghost buttons, inputs), so unlike
+     `border` it carries the 3:1 non-text threshold — see the contrast
+     script's "control border" pairs. */
+  --color-border-strong: light-dark(#6B7F97, #5A6B8B);
+
+  /* Primary accent. Moonstone leads with blue, Twilight with teal — the
+     brief's hierarchy. Fills darken in light and brighten in dark so the
+     near-white / near-black `accent-on` ink keeps AA while pressed. */
+  --color-accent: light-dark(#3F5FE8, #22C7B8);
+  --color-accent-hover: light-dark(#3550CE, #2BD8C9);
+  --color-accent-active: light-dark(#2C45B4, #1FC2B5);
+  /* Ink ON the accent fill: white on blue, near-black on teal. */
+  --color-accent-on: light-dark(#FFFFFF, #080B14);
+  /* Text-safe accent: links, labels, focus rings, error text and coloured
+     small type. One step deeper than the fill in light so small blue type
+     clears 4.5:1 even on the raised surface and over the cursor light. */
+  --color-accent-ink: light-dark(#3A55D8, #22C7B8);
+
+  /* Success — the one green outside the identity trio, so "message sent"
+     never reads as an accent. */
+  --color-success-ink: light-dark(#0E7C51, #4ADE80);
+
+  /* Secondary accent — lavender, the constant across both themes.
+     `-ink` is its text-safe sibling: pale lavender cannot carry small
+     type on paper, so light gets the deep step. */
+  --color-secondary: light-dark(#9B7CFF, #8B6DFF);
+  --color-secondary-ink: light-dark(#6B4DB5, #A78BFA);
+
+  /* Tertiary support — teal in light, electric blue in dark: the third
+     note of each palette (the About card dots, image tints). Light uses a
+     deepened teal so the dot clears 3:1 on paper as a UI detail. */
+  --color-tertiary: light-dark(#1E9E92, #4F7CFF);
+
+  /* The hairline an interactive surface adopts on hover/focus. */
+  --color-pop-border: light-dark(#3A55D8, #8B6DFF);
+
+  /* Stat figure's number on hover: warm gold in BOTH themes — the brief's
+     "occasional hover detail". Light uses the deeper text-safe gold so the
+     figure keeps AA; dark uses the brief's #C6A15B. */
+  --color-stat-hover: light-dark(#87642F, #C6A15B);
+
+  /* Tinted washes — the only sanctioned place a soft glow blob appears,
+     and even then only in the hero and behind the portrait. Pastel in
+     Moonstone, luminous in Twilight. */
+  --color-wash-blue: light-dark(#C9D5F5, #4F7CFF);
+  --color-wash-teal: light-dark(#C6ECE7, #22C7B8);
+
+  /* Gradient-name stops (Hero h1) — the AA-safe rendition of each theme's
+     identity trio: blue → teal → lavender in light, teal → lavender →
+     blue in dark (the brief's hero direction). Display type, but held to
+     4.5:1 anyway so the stops are a token-level guarantee. */
+  --gradient-name-from: light-dark(#3A55D8, #22C7B8);
+  --gradient-name-mid: light-dark(#0E7C71, #8B6DFF);
+  --gradient-name-to: light-dark(#6B4DB5, #4F7CFF);
+
+  /* Identity trio at BRIGHT strength — the VK ring and monogram plate.
+     Decorative only, never text: Moonstone blue → teal → lavender,
+     Twilight teal → lavender → blue. */
+  --identity-from: light-dark(#3F5FE8, #22C7B8);
+  --identity-mid: light-dark(#24B9AC, #8B6DFF);
+  --identity-to: light-dark(#9B7CFF, #4F7CFF);
+
+  /* ---- Gold accent — the jewelry token ----
+     The brief's gold at decorative strength: #C6A15B in Twilight,
+     #B58B45 in Moonstone — hairlines, dots, rings, tiny details.
+     `gold-ink` is its text-safe sibling for gold micro-type: #B58B45
+     cannot clear 4.5:1 on paper, so light gold text goes one step
+     deeper while dark keeps the brief gold. Gold never fills a button. */
+  --color-gold-accent: light-dark(#B58B45, #C6A15B);
+  --color-gold-ink: light-dark(#87642F, #C6A15B);
+
+  /* Monogram plate ink — the plate is a deep object in both themes, so
+     its letter stays light either way. */
+  --color-plate-ink: light-dark(#F4F6FA, #F3F4F6);
+
+  /* -------------------------------------------------------------------------
+     TYPOGRAPHY
+     A three-voice system:
+       display  Instrument Serif — editorial, art-directed moments only
+       sans     Geist Variable  — all interface and body copy
+       mono     Geist Mono       — metadata, tech labels, code
+     ------------------------------------------------------------------------- */
+  --font-display: 'Instrument Serif', ui-serif, Georgia, 'Times New Roman', serif;
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'SFMono-Regular', 'Cascadia Mono', monospace;
+
+  /* Fluid scale. Clamp keeps hero type readable from 360px to 2560px without
+     a single media query. */
+  --text-micro: 0.6875rem;
+  --text-micro--line-height: 1.2;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.4;
+  --text-body-sm: 0.9375rem;
+  --text-body-sm--line-height: 1.6;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.65;
+  /* One step above body for card titles that sit below `title` scale —
+     certification headings, small panel headers. */
+  --text-body-strong: 1.125rem;
+  --text-body-strong--line-height: 1.5;
+  --text-lead: clamp(1.125rem, 0.35vw + 1.05rem, 1.375rem);
+  --text-lead--line-height: 1.6;
+  --text-title: clamp(1.375rem, 0.55vw + 1.22rem, 1.875rem);
+  --text-title--line-height: 1.25;
+  --text-display-sm: clamp(2rem, 1.4vw + 1.6rem, 3rem);
+  --text-display-sm--line-height: 1.1;
+  --text-display-md: clamp(2.75rem, 3.2vw + 1.7rem, 5rem);
+  --text-display-md--line-height: 1.02;
+  --text-display-lg: clamp(3.5rem, 7vw + 1.4rem, 9rem);
+  --text-display-lg--line-height: 0.94;
+
+  --tracking-tight: -0.02em;
+  --tracking-tighter: -0.035em;
+  --tracking-wide: 0.08em;
+  --tracking-widest: 0.16em;
+}
+
+/* -----------------------------------------------------------------------------
+   RADII
+   Restrained: cards top out at 16px. A shallow scale is what keeps the page
+   from reading as a template — most surfaces sit at sm or md.
+   -------------------------------------------------------------------------- */
+@theme {
+  --radius-none: 0px;
+  --radius-xs: 3px;
+  --radius-sm: 6px;
+  --radius-md: 16px;
+  --radius-lg: 16px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+}
+
+/* -----------------------------------------------------------------------------
+   ELEVATION
+   Cool-tinted, never neutral black. The dark theme gets deeper shadows because
+   a dark surface against a dark page needs more separation than a light one
+   does. `--shadow-pop` is the ONE place a coloured ambient glow lives at rest:
+   a lavender/blue hairline with a restrained teal edge bloom in Twilight, a
+   blue hairline with a lavender-blue bloom in Moonstone — premium ambient
+   lighting, not neon.
+   -------------------------------------------------------------------------- */
+@theme {
+  --shadow-e1: 0 1px 2px 0 light-dark(rgb(16 24 43 / 0.06), rgb(0 0 0 / 0.5));
+  --shadow-pop:
+    0 0 0 1px light-dark(rgb(58 85 216 / 0.2), rgb(139 109 255 / 0.24)),
+    0 0 24px -4px light-dark(rgb(63 95 232 / 0.14), rgb(34 199 184 / 0.12)),
+    0 18px 38px -16px light-dark(rgb(16 24 43 / 0.22), rgb(0 0 0 / 0.7));
+
+  /* The tiny gold inset on the VK identity plate — jewelry, not paint. */
+  --shadow-gold-ring: inset 0 0 0 1px
+    light-dark(rgb(181 139 69 / 0.55), rgb(198 161 91 / 0.5));
+}
+
+/* -----------------------------------------------------------------------------
+   MOTION
+   Durations are deliberately unhurried. Motion here should feel like a page
+   turning, not a toy. `--ease-*` values are mirrored in src/lib/motion.js so
+   CSS transitions and Framer Motion animations cannot drift apart.
+   -------------------------------------------------------------------------- */
+@theme {
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* -----------------------------------------------------------------------------
+   LAYOUT PRIMITIVES
+   Breakpoints, container widths, vertical rhythm and the z-index stack live
+   here so the rhythm is consistent everywhere and documented in one place.
+   Declared in `@theme` rather than `:root` on purpose: Tailwind only generates
+   utilities from theme namespaces, so this is what makes `max-w-wide`,
+   `px-gutter`, `z-nav` and `z-modal` resolve as real classes.
+   -------------------------------------------------------------------------- */
+@theme {
+  /* Breakpoints are mobile-first; declared explicitly so the scale is
+     intentional and legible rather than inherited by default. */
+  --breakpoint-xs: 30rem; /*  480px — large phone     */
+  --breakpoint-sm: 40rem; /*  640px — phone landscape */
+  --breakpoint-md: 48rem; /*  768px — tablet          */
+  --breakpoint-lg: 64rem; /* 1024px — laptop          */
+  --breakpoint-xl: 80rem; /* 1280px — desktop         */
+  --breakpoint-2xl: 96rem; /* 1536px — large desktop  */
+
+  /* Reading measure. Prose columns are capped well below the full container
+     so line length stays comfortable at every breakpoint. */
+  --container-prose: 68ch;
+  --container-narrow: 46rem;
+  --container-content: 76rem;
+  --container-wide: 92rem;
+
+  /* Vertical rhythm between page sections. Fluid, so mobile is not cramped
+     and desktop is not cavernous. */
+  --spacing-section: clamp(5rem, 9vw, 11rem);
+  --spacing-section-sm: clamp(3.5rem, 6vw, 6rem);
+  --spacing-gutter: clamp(1.25rem, 4vw, 3.5rem);
+
+  /* Depth stack: explicit z-indices so nothing depends on source order.
+     The page modal sits above the sticky header, which is why the header
+     declares a z-index at all. */
+  --z-index-base: 10;
+  --z-index-raised: 20;
+  --z-index-sticky: 30;
+  --z-index-nav: 40;
+  --z-index-overlay: 50;
+  --z-index-modal: 60;
+}
+
+/* -----------------------------------------------------------------------------
+   THEME VARIANT
+   Tailwind's `dark:` variant defaults to `prefers-color-scheme`, but this site
+   switches on the `data-theme` attribute (the toggle overrides the OS). One
+   custom variant re-points every `dark:` utility at the attribute so the two
+   mechanisms can never disagree.
+   -------------------------------------------------------------------------- */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* -----------------------------------------------------------------------------
+   THEME BOOTSTRAP
+   `color-scheme` is the single switch every `light-dark()` token resolves
+   against, so setting it once re-themes the entire document — including the
+   scrollbar and native form controls, which `color-scheme` also drives.
+   `data-theme` (written by the inline boot script in index.html before first
+   paint) is authoritative; the media query covers "no stored preference"
+   before that script runs.
+   -------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+  }
+}
+
+/* Non-utility variables: consumed directly via var(), never as a class. */
+:root {
+  /* Height of the sticky header, consumed by scroll-padding-top and the
+     hero's min-height so anchor links and the fold never sit under it. */
+  --header-height: 4.25rem;
+}
